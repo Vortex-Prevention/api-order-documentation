@@ -1,0 +1,802 @@
+openapi: 3.0.3
+info:
+  title: Swagger Vortex - Orders -> OpenAPI 3.0
+  description: |-
+    This is a project for documentation of API Contract of Order.
+
+  termsOfService: toDo
+  contact:
+    email: technology@vortex-paas.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.0.1
+
+servers:
+  - url: https://vortex-paas.sand-box.com
+tags:
+  - name: Orders
+    description: Everything about your Orders
+    externalDocs:
+      description: Read more
+      url: http://vortex-paas.com/doc/orders
+  - name: Collaborators
+    description: Everything about Collaborators
+    externalDocs:
+      description: Read more
+      url: http://vortex-paas.com/doc/collaborators
+  - name: Partners
+    description: Everything about Partners
+    externalDocs:
+      description: Read more
+      url: http://vortex-paas.com/doc/partners
+paths:
+  /v1/orders/:
+    post:
+      tags:
+        - Orders
+      summary: Add a new order
+      description: Adding a new order from a partner
+      operationId: addOrder
+      parameters:
+        - name: Authorization
+          in: header
+          description: Token bearer pre generate by oauth request
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: 'Bearer GHViphopimn46871HAiouybo21594'
+        - name: partnerId
+          in: header
+          description: identifier of the partner that is adding a new order
+          required: true
+          explode: true
+          schema:
+            type: integer
+            example: 989189289
+      requestBody:
+        description: Add a new order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Orders'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Orders'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+        '401':
+          description: Unauthorized
+        '403':
+          description: Partner not allowed
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unprocessable_Entity'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Unprocessable_Entity'
+        '500':
+          description: Internal Server Error
+      security:
+        - partner_auth:
+            - write:orders
+            - read:orders
+    get:
+      tags:
+        - Orders
+      summary: Get a list of all orders 
+      description: Get a list of all orders in
+      operationId: findOrders
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Orders'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Orders'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Partner not allowed
+        '500':
+          description: Internal Server Error
+      security:
+        - partner_auth:
+            - write:orders
+            - read:orders
+  /v1/orders/{partnerId}:
+    get:
+      tags:
+        - Orders
+      summary: Get a list of orders 
+      description: Get a list of orders from a particular partner
+      operationId: findOrdersByPartnerId
+      parameters:
+        - name: partnerId
+          in: path
+          description: ID of partner to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Orders'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Orders'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Partner not allowed
+        '500':
+          description: Internal Server Error
+      security:
+        - partner_auth:
+            - write:orders
+            - read:orders
+
+  /v1/partners/:
+    post:
+      tags:
+        - Partners
+      summary: Add a new order
+      description: Adding a new order from a partner
+      operationId: addOrder
+      parameters:
+        - name: Authorization
+          in: header
+          description: Token bearer pre generate by oauth request
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: 'Bearer GHViphopimn46871HAiouybo21594'
+      requestBody:
+        description: Add a new order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Partners'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Partners'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+        '401':
+          description: Unauthorized
+        '403':
+          description: Partner not allowed
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unprocessable_Entity'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Unprocessable_Entity'
+        '500':
+          description: Internal Server Error
+      security:
+        - partner_auth:
+            - write:orders
+            - read:orders
+    get:
+      tags:
+        - Partners
+      summary: Get a list of all orders 
+      description: Get a list of all orders in
+      operationId: findOrders
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Orders'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Orders'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Partner not allowed
+        '500':
+          description: Internal Server Error
+      security:
+        - partner_auth:
+            - write:orders
+            - read:orders
+  /v1/partners/{partnerId}:
+    get:
+      tags:
+        - Partners
+      summary: Get a list of orders 
+      description: Get a list of orders from a particular partner
+      operationId: findOrdersByPartnerId
+      parameters:
+        - name: partnerId
+          in: path
+          description: ID of partner to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Orders'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Orders'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Partner not allowed
+        '500':
+          description: Internal Server Error
+      security:
+        - partner_auth:
+            - write:orders
+            - read:orders
+  /v1/collaborators:
+    post:
+      tags:
+        - Collaborators
+      summary: Create user
+      description: This can only be done by the logged in user.
+      operationId: createCollaborator
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Collaborators'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Collaborators'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Collaborators'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collaborators'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Collaborators'
+  /v1/collaborators/createWithList:
+    post:
+      tags:
+        - Collaborators
+      summary: Creates list of users with given input array
+      description: Creates list of users with given input array
+      operationId: createCollaboratorsWithListInput
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Collaborators'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collaborators'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Collaborators'
+        default:
+          description: successful operation
+  /v1/collaborators/login:
+    get:
+      tags:
+        - Collaborators
+      summary: Logs user into the system
+      description: ''
+      operationId: loginUser
+      parameters:
+        - name: username
+          in: query
+          description: The user name for login
+          required: false
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password for login in clear text
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-Rate-Limit:
+              description: calls per hour allowed by the user
+              schema:
+                type: integer
+                format: int32
+            X-Expires-After:
+              description: date in UTC when token expires
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/xml:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Invalid username/password supplied
+  /v1/collaborators/logout:
+    get:
+      tags:
+        - Collaborators
+      summary: Logs out current logged in user session
+      description: ''
+      operationId: logoutUser
+      parameters: []
+      responses:
+        default:
+          description: successful operation
+  /v1/collaborators/{collaboratorName}:
+    get:
+      tags:
+        - Collaborators
+      summary: Get user by user name
+      description: ''
+      operationId: getUserByName
+      parameters:
+        - name: username
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collaborators'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Collaborators'
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+    put:
+      tags:
+        - Collaborators
+      summary: Update user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      parameters:
+        - name: username
+          in: path
+          description: name that need to be deleted
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent user in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Collaborators'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Collaborators'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Collaborators'
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+        - Collaborators
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: deleteUser
+      parameters:
+        - name: username
+          in: path
+          description: The name that needs to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        petId:
+          type: integer
+          format: int64
+          example: 198772
+        quantity:
+          type: integer
+          format: int32
+          example: 7
+        shipDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          description: Order Status
+          example: approved
+          enum:
+            - placed
+            - approved
+            - delivered
+        complete:
+          type: boolean
+      xml:
+        name: order
+    Orders:
+      type: object
+      properties:
+        vortexOrderid:
+          type: integer
+          format: int64
+          example: 10
+        partnerOrderid:
+          type: integer
+          format: int64
+          example: 10
+        partnerId:
+          type: string
+          description: Partner identification id
+          example: Vortex e-Shop
+        customerName:
+          type: string
+          description: The name of the ordering customer
+          example: Machado de Assis
+        customerDocumentNumber:
+          type: string
+          description: The document of the ordering customer
+          example: '00000000000'
+        shippingAddress:
+          type: string
+          description: Order shipping address
+          example: 'Av Quincas Borba, 31, Vila Yaya - São Paulo/SP'
+        shippingPostalCode:
+          type: string
+          description: Order shipping postal code
+          example: '00000-000'
+        billingAddress:
+          type: string
+          description: Order billing address
+          example: 'Quincas Borba, 31 São Paulo/SP'
+        billingPostalCode:
+          type: string
+          description: Order billing postal code
+          example: '00000-000'
+        cardholderName:
+          type: string
+          description: Name printed on card
+          example: 'John Ronald Tolkien'
+        cardholderDocumentNumber:
+          type: string
+          description: The cardholder document
+          example: '00000000000'
+        relationshipType:
+          type: string
+          description: Type of relationship between customer and cardholder
+          example: 'Amigos de trabalho'
+        phoneNumber:
+          type: string
+          description: Order customer phone
+          example: '5511999999999'
+        paymentMethod:
+          type: string
+          description: Payment method for this order
+          example: credit
+          enum:
+            - credit
+            - debit
+            - pix
+            - voucher
+            - transfer
+            - toDo
+        status:
+          type: string
+          description: Order review status
+          example: new
+          enum:
+            - pending
+            - approved
+            - cancelled
+            - new
+        statusDescription:
+          type: string
+          description: Detailed order description
+          example: new
+          enum:
+            - fraud
+            - cancelled by issuer
+            - approved by issuer
+            - new
+      xml:
+        name: Orders
+    Unprocessable_Entity:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        petId:
+          type: integer
+          format: int64
+          example: 198772
+        quantity:
+          type: integer
+          format: int32
+          example: 7
+        shipDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          description: Order Status
+          example: approved
+          enum:
+            - placed
+            - approved
+            - delivered
+        complete:
+          type: boolean
+      xml:
+        name: unprocessable entity
+    Partners:
+      type: object
+      properties:
+        partnerId:
+          type: integer
+          format: int64
+          example: 989189289
+        partnerName:
+          type: string
+          example: MegaLuz
+          description: The fantasy name of partner
+        document:
+          type: string
+          description: The document of the partner
+          example: '00000000000'
+        contact:
+          type: string
+          example: "Manoel da Silva"
+          description: The fantasy name of partner
+        email:
+          type: string
+          description: The document of the partner
+          example: '00000000000'
+        ddd:
+          type: string
+          example: MegaLuz
+          description: The fantasy name of partner
+        phoneNumber:
+          type: string
+          description: The document of the partner
+          example: '00000000000'
+        segment:
+          type: string
+          example: MegaLuz
+          description: The fantasy name of partner
+        address:
+          type: array
+          xml:
+            name: addresses
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/Address'
+      xml:
+        name: customer
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          example: Av. Nossa Senhora
+        city:
+          type: string
+          example: Guarulhos
+        state:
+          type: string
+          example: SP
+        postalCode:
+          type: string
+          example: '08070-200'
+        type:
+          type: string
+          example: billing
+
+      xml:
+        name: address
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Dogs
+      xml:
+        name: category
+    Collaborators:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+        phone:
+          type: string
+          example: '12345'
+        userStatus:
+          type: integer
+          description: User Status
+          format: int32
+          example: 1
+      xml:
+        name: user
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      xml:
+        name: tag
+    Pet:
+      required:
+        - name
+        - photoUrls
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: doggie
+        category:
+          $ref: '#/components/schemas/Category'
+        photoUrls:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            type: string
+            xml:
+              name: photoUrl
+        tags:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/Tag'
+        status:
+          type: string
+          description: pet status in the store
+          enum:
+            - available
+            - pending
+            - sold
+      xml:
+        name: pet
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  requestBodies:
+    Pet:
+      description: Pet object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Pet'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Pet'
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Collaborators'
+  securitySchemes:
+    partner_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://vortex-paas/v1/oauth/partner/{partner}
+          scopes:
+            order: modify pets in your account
+            user: read your pets
+            partner: modify pets in your account
+    collaborators_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://vortex-paas/v1/oauth/collaborators/{user}
+          scopes:
+            order: modify pets in your account
+            user: read your pets
+            partner: modify pets in your account
+
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
