@@ -164,9 +164,9 @@ paths:
     get:
       tags:
         - Orders
-      summary: Get a list of orders 
-      description: Get a list of orders from a particular partner
-      operationId: findOrdersByPartnerId
+      summary: Get an orders details
+      description: Get an orders details by internal order id
+      operationId: findOrdersDetailsByInternalOrderId
       parameters:
         - name: partnerId
           in: path
@@ -204,11 +204,6 @@ components:
           type: string
           description: Nome da loja parceira
           example: MegaLeo
-        vortexOrderid:
-          type: integer
-          format: int64
-          description: Codigo do pedido Vortex
-          example: 10
         partnerOrderid:
           type: integer
           format: int64
@@ -455,7 +450,7 @@ components:
           type: integer
           format: int64
           example: 10
-        petId:
+        ordersId:
           type: integer
           format: int64
           example: 198772
