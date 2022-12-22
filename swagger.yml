@@ -1,0 +1,525 @@
+openapi: 3.0.3
+info:
+  title: Swagger Vortex - Orders -> OpenAPI 3.0
+  description: |-
+    This is a project for documentation of API Contract of Order.
+
+  termsOfService: toDo
+  contact:
+    email: technology@vortex-paas.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.0.1
+
+servers:
+  - url: https://vortex-paas.sand-box.com
+tags:
+  - name: Orders
+    description: Everything about your Orders
+    externalDocs:
+      description: Read more
+      url: http://vortex-paas.com/doc/orders
+paths:
+  /v1/orders/:
+    post:
+      tags:
+        - Orders
+      summary: Add a new order
+      description: Adding a new order from a partner
+      operationId: addOrder
+      parameters:
+        - name: Authorization
+          in: header
+          description: Token bearer pre generate by oauth request
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: 'Bearer GHViphopimn46871HAiouybo21594'
+        - name: partnerId
+          in: header
+          description: identifier of the partner that is adding a new order
+          required: true
+          explode: true
+          schema:
+            type: integer
+            example: 989189289
+      requestBody:
+        description: Add a new order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddOrders'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+        '401':
+          description: Unauthorized
+        '403':
+          description: Partner not allowed
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unprocessable_Entity'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Unprocessable_Entity'
+        '500':
+          description: Internal Server Error
+      security:
+        - partner_auth:
+            - write:orders
+            - read:orders
+    get:
+      tags:
+        - Orders
+      summary: Get a list of all orders 
+      description: Get a list of all orders in
+      operationId: findOrders
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrdersList'          
+        '401':
+          description: Unauthorized
+        '403':
+          description: Partner not allowed
+        '500':
+          description: Internal Server Error
+      security:
+        - partner_auth:
+            - read:orders
+  /v1/orders/partnerId/{partnerId}:
+    get:
+      tags:
+        - Orders
+      summary: Get a list of orders 
+      description: Get a list of orders from a particular partner
+      operationId: findOrdersByPartnerId
+      parameters:
+        - name: partnerId
+          in: path
+          description: ID of partner to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrdersList'          
+        '401':
+          description: Unauthorized
+        '403':
+          description: Partner not allowed
+        '500':
+          description: Internal Server Error
+      security:
+        - partner_auth:
+            - write:orders
+            - read:orders
+  /v1/orders/partnerId/{partnerId}/partnerOrderid/{partnerOrderid}:
+    get:
+      tags:
+        - Orders
+      summary: Get an order 
+      description: Get an order with a specific code
+      operationId: findOrdersByPartnerOrderid
+      parameters:
+        - name: partnerOrderid
+          in: path
+          description: ID of partner to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShortOrder'          
+        '401':
+          description: Unauthorized
+        '403':
+          description: Partner not allowed
+        '500':
+          description: Internal Server Error
+      security:
+        - partner_auth:
+            - write:orders
+            - read:orders
+  /v1/orders/details/vortexOrderid/{vortexOrderid}:
+    get:
+      tags:
+        - Orders
+      summary: Get a list of orders 
+      description: Get a list of orders from a particular partner
+      operationId: findOrdersByPartnerId
+      parameters:
+        - name: partnerId
+          in: path
+          description: ID of partner to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrdersDetails'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/OrdersDetails'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Partner not allowed
+        '500':
+          description: Internal Server Error
+      security:
+        - partner_auth:
+            - write:orders
+            - read:orders
+components:
+  schemas:
+    AddOrders:
+      type: object
+      properties:
+        partner:
+          type: string
+          description: Nome da loja parceira
+          example: MegaLeo
+        vortexOrderid:
+          type: integer
+          format: int64
+          description: Codigo do pedido Vortex
+          example: 10
+        partnerOrderid:
+          type: integer
+          format: int64
+          description: Codigo do pedido loja parceira
+          example: 1512
+        orderDate:
+          type: string
+          description: Data do pedido
+          example: 12/12/2022
+        orderTime:
+          type: string
+          description: Horario do pedido
+          example: 19:30:15
+        customerName:
+          type: string
+          description: The name of the ordering customer
+          example: Machado de Assis
+        customerDocumentNumber:
+          type: string
+          description: The document of the ordering customer
+          example: '00000000000'
+        phoneNumber:
+          type: string
+          description: Order customer phone
+          example: '5511999999999'
+        email:
+          type: string
+          format: email
+          description: Order customer email
+          example: 'machado.assis@gmail.com'
+        shippingAddress:
+          type: string
+          description: Order shipping address
+          example: 'Av Quincas Borba, 31, Vila Yaya - São Paulo/SP'
+        shippingPostalCode:
+          type: string
+          description: Order shipping postal code
+          example: '00000-000'
+        relationshipType:
+          type: string
+          description: Type of relationship between customer and cardholder
+          example: 'Amigos de trabalho'
+        shippingAmount:
+          type: number
+          format: double
+          description: Valor do frete
+          example: 55.59
+        amount:
+          type: number
+          format: double
+          description: Valor dos produtos
+          example: 159.95
+        discountApplied:
+          type: boolean
+          description: Houve disconto aplicado no pedido?
+          example: true
+        paymentMethod:
+          type: string
+          description: Payment method for this order
+          example: credit
+          enum:
+            - credit
+            - debit
+            - pix
+            - voucher
+            - transfer
+        orderItemsDescription:
+          type: array
+          description: Descrição dos itens do pedido
+          items:
+            type: string
+            example: 'Iphone 13 256gb, Capa de Celular'
+        PaymentData:
+          $ref: '#/components/schemas/PaymentData'
+    PaymentData:
+      type: object
+      properties:
+        cardholderName:
+          type: string
+          description: Name printed on card
+          example: 'John Ronald Tolkien'
+        cardholderDocumentNumber:
+          type: string
+          description: The cardholder document
+          example: '00000000000'
+        billingAddress:
+          type: string
+          description: Order billing address
+          example: 'Quincas Borba, 31 São Paulo/SP'
+        billingPostalCode:
+          type: string
+          description: Order billing postal code
+          example: '00000-000'
+        phoneNumber:
+          type: string
+          description: Order customer phone
+          example: '5511999999999'
+        cardMaskedNum:
+          type: string
+          description: Numero do cartão mascarado
+          example: '4245******1552'
+        issuer:
+          type: string
+          description: Issuer of card
+          example: 'Banco Online'
+        brand:
+          type: string
+          description: Brand of card
+          example: 'visa'
+        installmentsQuantity:
+          type: integer
+          description: Number of installments
+          example: 2
+    OrdersList:
+      type: object
+      properties:
+        order: 
+          type: array
+          items:
+            $ref: '#/components/schemas/ShortOrder'
+    ShortOrder:
+      type: object
+      properties:
+        partner:
+          type: string
+          description: Nome da loja parceira
+          example: MegaLeo
+        vortexOrderid:
+          type: integer
+          format: int64
+          description: Codigo do pedido Vortex
+          example: 10
+        partnerOrderid:
+          type: integer
+          format: int64
+          description: Codigo do pedido loja parceira
+          example: 1512
+        orderDate:
+          type: string
+          description: Data do pedido
+          example: 12/12/2022
+        orderTime:
+          type: string
+          description: Horario do pedido
+          example: 19:30:15
+    OrdersDetails:
+      type: object
+      properties:
+        partner:
+          type: string
+          description: Nome da loja parceira
+          example: MegaLeo
+        score:
+          type: integer
+          format: int64
+          example: 10
+        vortexOrderid:
+          type: integer
+          format: int64
+          description: Codigo do pedido Vortex
+          example: 10
+        partnerOrderid:
+          type: integer
+          format: int64
+          description: Codigo do pedido loja parceira
+          example: 1512
+        orderDate:
+          type: string
+          description: Data do pedido
+          example: 12/12/2022
+        orderTime:
+          type: string
+          description: Horario do pedido
+          example: 19:30:15
+        customerName:
+          type: string
+          description: The name of the ordering customer
+          example: Machado de Assis
+        customerDocumentNumber:
+          type: string
+          description: The document of the ordering customer
+          example: '00000000000'
+        phoneNumber:
+          type: string
+          description: Order customer phone
+          example: '5511999999999'
+        email:
+          type: string
+          format: email
+          description: Order customer email
+          example: 'machado.assis@gmail.com'
+        shippingAddress:
+          type: string
+          description: Order shipping address
+          example: 'Av Quincas Borba, 31, Vila Yaya - São Paulo/SP'
+        shippingPostalCode:
+          type: string
+          description: Order shipping postal code
+          example: '00000-000'
+        relationshipType:
+          type: string
+          description: Type of relationship between customer and cardholder
+          example: 'Amigos de trabalho'
+        shippingAmount:
+          type: number
+          format: double
+          description: Valor do frete
+          example: 55.59
+        amount:
+          type: number
+          format: double
+          description: Valor dos produtos
+          example: 159.95
+        discountApplied:
+          type: boolean
+          description: Houve disconto aplicado no pedido?
+          example: true
+        sla:
+          type: integer
+          description: Nivel de serviço acordado
+          example: 3
+        paymentMethod:
+          type: string
+          description: Payment method for this order
+          example: credit
+          enum:
+            - credit
+            - debit
+            - pix
+            - voucher
+            - transfer
+        orderItemsDescription:
+          type: array
+          description: Descrição dos itens do pedido
+          items:
+            type: string
+            example: 'Iphone 13 256gb, Capa de Celular'
+        PaymentData:
+          $ref: '#/components/schemas/PaymentData'
+    Unprocessable_Entity:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        petId:
+          type: integer
+          format: int64
+          example: 198772
+        quantity:
+          type: integer
+          format: int32
+          example: 7
+        shipDate:
+          type: string
+          format: date-time
+        status:
+          type: string
+          description: Order Status
+          example: approved
+          enum:
+            - placed
+            - approved
+            - delivered
+        complete:
+          type: boolean
+      xml:
+        name: unprocessable entity
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  requestBodies:
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/AddOrders'
+  securitySchemes:
+    partner_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://vortex-paas/v1/oauth/partner/{partnerId}
+          scopes:
+            order: toDo
+            user: toDo
+            partner: toDo
+    collaborators_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://vortex-paas/v1/oauth/collaborators/{userId}
+          scopes:
+            order: toDo
+            user: toDo
+            partner: toDo
+
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
