@@ -21,7 +21,7 @@ tags:
       description: Read more
       url: http://vortex-paas.com/doc/orders
 paths:
-  /v1/orders/:
+  /orders/v1/order:
     post:
       tags:
         - Orders
@@ -36,7 +36,7 @@ paths:
           explode: true
           schema:
             type: string
-            example: 'Bearer GHViphopimn46871HAiouybo21594'
+            example: "Bearer GHViphopimn46871HAiouybo21594"
         - name: partnerId
           in: header
           description: identifier of the partner that is adding a new order
@@ -50,25 +50,25 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddOrders'
+              $ref: "#/components/schemas/AddOrder"
         required: true
       responses:
-        '201':
+        "201":
           description: Successful operation
-        '401':
+        "401":
           description: Unauthorized
-        '403':
+        "403":
           description: Partner not allowed
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Unprocessable_Entity'          
+                $ref: "#/components/schemas/Unprocessable_Entity"
             application/xml:
               schema:
-                $ref: '#/components/schemas/Unprocessable_Entity'
-        '500':
+                $ref: "#/components/schemas/Unprocessable_Entity"
+        "500":
           description: Internal Server Error
       security:
         - partner_auth:
@@ -77,33 +77,50 @@ paths:
     get:
       tags:
         - Orders
-      summary: Get a list of all orders 
+      summary: Get a list of all orders
       description: Get a list of all orders in
       operationId: findOrders
+      parameters:
+        - name: Authorization
+          in: header
+          description: Token bearer pre generate by oauth request
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: "Bearer GHViphopimn46871HAiouybo21594"
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrdersList'          
-        '401':
+                $ref: "#/components/schemas/OrdersList"
+        "401":
           description: Unauthorized
-        '403':
+        "403":
           description: Partner not allowed
-        '500':
+        "500":
           description: Internal Server Error
       security:
         - partner_auth:
             - read:orders
-  /v1/orders/partnerId/{partnerId}:
+  /orders/v1/orders/partnerId/{partnerId}:
     get:
       tags:
         - Orders
-      summary: Get a list of orders 
+      summary: Get a list of orders
       description: Get a list of orders from a particular partner
       operationId: findOrdersByPartnerId
       parameters:
+        - name: Authorization
+          in: header
+          description: Token bearer pre generate by oauth request
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: "Bearer GHViphopimn46871HAiouybo21594"
         - name: partnerId
           in: path
           description: ID of partner to return
@@ -112,30 +129,38 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrdersList'          
-        '401':
+                $ref: "#/components/schemas/OrdersList"
+        "401":
           description: Unauthorized
-        '403':
+        "403":
           description: Partner not allowed
-        '500':
+        "500":
           description: Internal Server Error
       security:
         - partner_auth:
             - write:orders
             - read:orders
-  /v1/orders/partnerId/{partnerId}/partnerOrderid/{partnerOrderid}:
+  /orders/v1/order/partnerId/{partnerId}/partnerOrderid/{partnerOrderid}:
     get:
       tags:
         - Orders
-      summary: Get an order 
+      summary: Get an order
       description: Get an order with a specific code
       operationId: findOrdersByPartnerOrderid
       parameters:
+        - name: Authorization
+          in: header
+          description: Token bearer pre generate by oauth request
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: "Bearer GHViphopimn46871HAiouybo21594"
         - name: partnerOrderid
           in: path
           description: ID of partner to return
@@ -144,23 +169,23 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ShortOrder'          
-        '401':
+                $ref: "#/components/schemas/ShortOrder"
+        "401":
           description: Unauthorized
-        '403':
+        "403":
           description: Partner not allowed
-        '500':
+        "500":
           description: Internal Server Error
       security:
         - partner_auth:
             - write:orders
             - read:orders
-  /v1/orders/details/vortexOrderid/{vortexOrderid}:
+  /orders/v1/order/details/vortexOrderid/{vortexOrderid}:
     get:
       tags:
         - Orders
@@ -168,6 +193,14 @@ paths:
       description: Get an orders details by internal order id
       operationId: findOrdersDetailsByInternalOrderId
       parameters:
+        - name: Authorization
+          in: header
+          description: Token bearer pre generate by oauth request
+          required: true
+          explode: true
+          schema:
+            type: string
+            example: "Bearer GHViphopimn46871HAiouybo21594"
         - name: partnerId
           in: path
           description: ID of partner to return
@@ -176,20 +209,20 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OrdersDetails'          
+                $ref: "#/components/schemas/OrderDetails"
             application/xml:
               schema:
-                $ref: '#/components/schemas/OrdersDetails'
-        '401':
+                $ref: "#/components/schemas/OrderDetails"
+        "401":
           description: Unauthorized
-        '403':
+        "403":
           description: Partner not allowed
-        '500':
+        "500":
           description: Internal Server Error
       security:
         - partner_auth:
@@ -197,133 +230,363 @@ paths:
             - read:orders
 components:
   schemas:
-    AddOrders:
+    AddOrder:
       type: object
       properties:
-        partner:
-          type: string
-          description: Nome da loja parceira
-          example: MegaLeo
+        orderInfo:
+          $ref: "#/components/schemas/OrderInfo"
+        orderItems:
+          type: array
+          description: Descrição dos itens do pedido
+          items:
+            type: object
+            $ref: "#/components/schemas/OrderItem"
+        billingData:
+          $ref: "#/components/schemas/BillingData"
+        shippingData:
+          $ref: "#/components/schemas/ShippingData"
+        paymentData:
+          $ref: "#/components/schemas/PaymentsData"
+
+    OrderInfo:
+      type: object
+      properties:
         partnerOrderid:
           type: integer
           format: int64
           description: Codigo do pedido loja parceira
           example: 1512
-        orderDate:
+        orderDateTime:
           type: string
           description: Data do pedido
-          example: 12/12/2022
-        orderTime:
-          type: string
-          description: Horario do pedido
-          example: 19:30:15
-        customerName:
-          type: string
-          description: The name of the ordering customer
-          example: Machado de Assis
-        customerDocumentNumber:
-          type: string
-          description: The document of the ordering customer
-          example: '00000000000'
-        phoneNumber:
-          type: string
-          description: Order customer phone
-          example: '5511999999999'
-        email:
-          type: string
-          format: email
-          description: Order customer email
-          example: 'machado.assis@gmail.com'
-        shippingAddress:
-          type: string
-          description: Order shipping address
-          example: 'Av Quincas Borba, 31, Vila Yaya - São Paulo/SP'
-        shippingPostalCode:
-          type: string
-          description: Order shipping postal code
-          example: '00000-000'
+          example: "2023-03-09T21:38:59.9894222"
         relationshipType:
           type: string
           description: Type of relationship between customer and cardholder
-          example: 'Amigos de trabalho'
-        shippingAmount:
-          type: number
-          format: double
-          description: Valor do frete
-          example: 55.59
+          example: Amigos de trabalho
         amount:
           type: number
           format: double
           description: Valor dos produtos
-          example: 159.95
-        discountApplied:
-          type: boolean
-          description: Houve disconto aplicado no pedido?
-          example: true
-        paymentMethod:
+          example: 10000
+        totalAmount:
+          type: number
+          format: double
+          description: Valor total do pedido
+          example: 15995
+        discountamount:
+          type: number
+          format: double
+          description: Valor do disconto aplicado
+          example: 0
+        ip:
           type: string
-          description: Payment method for this order
-          example: credit
-          enum:
-            - credit
-            - debit
-            - pix
-            - voucher
-            - transfer
-        orderItemsDescription:
+          description: The name of the ordering customer
+          example: "192.168.0.1"
+        isGift:
+          type: boolean
+          description: The name of the ordering customer
+          example: false
+        originChannel:
+          type: string
+          description: The name of the ordering customer
+          example: website
+        businessCode:
+          type: number
+          description: The name of the ordering customer
+          example: 1
+        partnerSegment:
+          type: number
+          description: The name of the ordering customer
+          example: 1
+        SLA:
+          type: number
+          description: The name of the ordering customer
+          example: 30
+
+    OrderItem:
+      type: object
+      properties:
+        itemCode:
+          type: string
+          description: Name printed on card
+          example: "59845"
+        itemName:
+          type: string
+          description: The cardholder document
+          example: Iphone13 mini 256gb
+        amount:
+          type: number
+          description: Order billing address
+          example: 530000
+        quantity:
+          type: number
+          description: Order billing address
+          example: 1
+        categoryCode:
+          type: number
+          description: Order billing address
+          example: 1
+        categoryName:
+          type: string
+          description: The cardholder document
+          example: Iphone13 mini 256gb
+        isGift:
+          type: boolean
+          description: The name of the ordering customer
+          example: false
+        isMarketPlace:
+          type: boolean
+          description: The name of the ordering customer
+          example: true
+        sellerName:
+          type: string
+          description: Name printed on card
+          example: Loja do Juquinha
+        sellerDocument:
+          type: string
+          description: The cardholder document
+          example: 52645678910
+        courier:
+          type: string
+          description: The cardholder document
+          example: Fedex
+
+    BillingData:
+      type: object
+      properties:
+        client:
+          $ref: "#/components/schemas/Client"
+        address:
+          $ref: "#/components/schemas/Address"
+        phones:
           type: array
           description: Descrição dos itens do pedido
           items:
-            type: string
-            example: 'Iphone 13 256gb, Capa de Celular'
-        PaymentData:
-          $ref: '#/components/schemas/PaymentData'
-    PaymentData:
+            type: object
+            $ref: "#/components/schemas/Phone"
+
+    ShippingData:
       type: object
       properties:
-        cardholderName:
+        client:
+          $ref: "#/components/schemas/Client"
+        address:
+          $ref: "#/components/schemas/Address"
+        phones:
+          type: array
+          description: Descrição dos itens do pedido
+          items:
+            type: object
+            $ref: "#/components/schemas/Phone"
+        deliveryType:
           type: string
           description: Name printed on card
-          example: 'John Ronald Tolkien'
-        cardholderDocumentNumber:
+          example: 1
+        deliveryTime:
           type: string
           description: The cardholder document
-          example: '00000000000'
-        billingAddress:
-          type: string
+          example: 5 dias úteis
+        shippingAmount:
+          type: number
           description: Order billing address
-          example: 'Quincas Borba, 31 São Paulo/SP'
-        billingPostalCode:
+          example: 5559
+        pickUpStoreDocument:
           type: string
-          description: Order billing postal code
-          example: '00000-000'
-        phoneNumber:
+          description: The cardholder document
+          example: 12345678910
+
+    PaymentsData:
+      type: object
+      properties:
+        paymentDateTime:
           type: string
-          description: Order customer phone
-          example: '5511999999999'
-        cardMaskedNum:
-          type: string
-          description: Numero do cartão mascarado
-          example: '4245******1552'
-        issuer:
-          type: string
-          description: Issuer of card
-          example: 'Banco Online'
-        brand:
-          type: string
-          description: Brand of card
-          example: 'visa'
+          description: Data do pedido
+          example: "2023-03-09T21:38:59.9894222"
+        amount:
+          type: number
+          format: double
+          description: Valor pago
+          example: 15995
+        paymentMethod:
+          type: number
+          description: |
+            **The below table defines the metho code**
+             | Method Code    | Method Name |
+             | ---------------| ------------| 
+             | 1              | credit      | 
+             | 2              | debit       |
+             | 3              | pix         |
+             | 4              | voucher     |
+             | 5              | transfer    |
+          example: 1
+          enum:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
         installmentsQuantity:
           type: integer
           description: Number of installments
           example: 2
+        currency:
+          type: integer
+          description: Number of installments
+          example: 986
+        card:
+          $ref: "#/components/schemas/Card"
+        address:
+          $ref: "#/components/schemas/Address"
+
+    Client:
+      type: object
+      properties:
+        clientType:
+          type: number
+          description: Name printed on card
+          example: 1
+        document:
+          type: string
+          description: The cardholder document
+          example: 12345678910
+        name:
+          type: string
+          description: The cardholder document
+          example: John Ronald Tolkien
+        birthDate:
+          type: string
+          description: Name printed on card
+          example: "1988-02-10"
+        email:
+          type: string
+          description: The cardholder document
+          example: client@email.com.br
+        gender:
+          type: string
+          description: The cardholder document
+          example: M
+
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          description: Name printed on card
+          example: Quincas Borba
+        number:
+          type: string
+          description: The cardholder document
+          example: 31
+        additionalInformation:
+          type: string
+          description: The cardholder document
+          example: Bloco A - Apto 410
+        district:
+          type: string
+          description: Name printed on card
+          example: Vila Nova Cachoeirinha
+        city:
+          type: string
+          description: The cardholder document
+          example: São Paulo
+        state:
+          type: string
+          description: The cardholder document
+          example: SP
+        zipcode:
+          type: string
+          description: Name printed on card
+          example: 08090-070
+        country:
+          type: string
+          description: The cardholder document
+          example: Brasil
+        reference:
+          type: string
+          description: The cardholder document
+          example: Proximo ao Shopping Bourbon
+
+    Phone:
+      type: object
+      properties:
+        type:
+          type: number
+          description: Name printed on card
+          example: 1
+        ddi:
+          type: number
+          description: Name printed on card
+          example: 55
+        ddd:
+          type: number
+          description: Name printed on card
+          example: 11
+        phoneNumber:
+          type: number
+          description: Name printed on card
+          example: 999999999
+        extension:
+          type: string
+          description: The cardholder document
+          example: 2552
+
+    Card:
+      type: object
+      properties:
+        maskedPAN:
+          type: string
+          description: Name printed on card
+          example: 123456xxxxxx1234
+        hash:
+          type: string
+          description: The cardholder document
+          example: "12345678945612301234569874563210"
+        bin:
+          type: string
+          description: The cardholder document
+          example: 123456
+        end:
+          type: string
+          description: Name printed on card
+          example: 1234
+        brandCode:
+          type: number
+          description: |
+            **The below table defines the brands code**
+             | Method Code    | Method Name |
+             | ---------------| ------------| 
+             | 1              | Visa        | 
+             | 2              | MasterCard  |
+             | 3              | Diners      |
+             | 4              | Outros      |
+
+          example: 1
+        validityDate:
+          type: string
+          description: The cardholder document
+          example: 05/2029
+        cardholderName:
+          type: string
+          description: Name printed on card
+          example: John Ronald Tolkien
+        cardholderDocumentNumber:
+          type: string
+          description: The cardholder document
+          example: 12345678910
+        tid:
+          type: string
+          description: The cardholder document
+          example: 123548761315847687436
+
     OrdersList:
       type: object
       properties:
-        order: 
+        order:
           type: array
           items:
-            $ref: '#/components/schemas/ShortOrder'
+            $ref: "#/components/schemas/ShortOrder"
+
     ShortOrder:
       type: object
       properties:
@@ -349,7 +612,7 @@ components:
           type: string
           description: Horario do pedido
           example: 19:30:15
-    OrdersDetails:
+    OrderDetails:
       type: object
       properties:
         partner:
@@ -365,84 +628,50 @@ components:
           format: int64
           description: Codigo do pedido Vortex
           example: 10
-        partnerOrderid:
-          type: integer
-          format: int64
-          description: Codigo do pedido loja parceira
-          example: 1512
-        orderDate:
+        createDate:
           type: string
           description: Data do pedido
-          example: 12/12/2022
-        orderTime:
+          example: "2023-03-09T21:38:59.9894222"
+        updateDate:
           type: string
-          description: Horario do pedido
-          example: 19:30:15
-        customerName:
+          description: Data do pedido
+          example: "2023-03-09T21:38:59.9894222"
+        annotations:
           type: string
-          description: The name of the ordering customer
-          example: Machado de Assis
-        customerDocumentNumber:
+          description: Nome da loja parceira
+          example: Contato realizado com o portador do cartão
+        status1:
           type: string
-          description: The document of the ordering customer
-          example: '00000000000'
-        phoneNumber:
+          description: Nome da loja parceira
+          example: 1
+        status2:
           type: string
-          description: Order customer phone
-          example: '5511999999999'
-        email:
+          description: Nome da loja parceira
+          example: 2
+        conclusion:
           type: string
-          format: email
-          description: Order customer email
-          example: 'machado.assis@gmail.com'
-        shippingAddress:
-          type: string
-          description: Order shipping address
-          example: 'Av Quincas Borba, 31, Vila Yaya - São Paulo/SP'
-        shippingPostalCode:
-          type: string
-          description: Order shipping postal code
-          example: '00000-000'
-        relationshipType:
-          type: string
-          description: Type of relationship between customer and cardholder
-          example: 'Amigos de trabalho'
-        shippingAmount:
-          type: number
-          format: double
-          description: Valor do frete
-          example: 55.59
-        amount:
-          type: number
-          format: double
-          description: Valor dos produtos
-          example: 159.95
-        discountApplied:
-          type: boolean
-          description: Houve disconto aplicado no pedido?
-          example: true
-        sla:
-          type: integer
-          description: Nivel de serviço acordado
+          description: Nome da loja parceira
           example: 3
-        paymentMethod:
-          type: string
-          description: Payment method for this order
-          example: credit
-          enum:
-            - credit
-            - debit
-            - pix
-            - voucher
-            - transfer
-        orderItemsDescription:
+        issuerRelationship:
+          type: boolean
+          description: Nome da loja parceira
+          example: true
+        orderInfo:
+          $ref: "#/components/schemas/OrderInfo"
+        orderItems:
           type: array
           description: Descrição dos itens do pedido
           items:
-            type: string
-            example: 'Iphone 13 256gb, Capa de Celular'
-        PaymentData:
-          $ref: '#/components/schemas/PaymentData'
+            type: object
+            $ref: "#/components/schemas/OrderItem"
+        billingData:
+          $ref: "#/components/schemas/BillingData"
+        shippingData:
+          $ref: "#/components/schemas/ShippingData"
+        paymentData:
+          $ref: "#/components/schemas/PaymentsData"
+
+
     Unprocessable_Entity:
       type: object
       properties:
@@ -484,7 +713,7 @@ components:
         message:
           type: string
       xml:
-        name: '##default'
+        name: "##default"
   requestBodies:
     UserArray:
       description: List of user object
@@ -493,7 +722,7 @@ components:
           schema:
             type: array
             items:
-              $ref: '#/components/schemas/AddOrders'
+              $ref: "#/components/schemas/AddOrder"
   securitySchemes:
     partner_auth:
       type: oauth2
