@@ -2,12 +2,16 @@
 	"partner": "MegaLeo",
 	"score": 10,
 	"vortexOrderid": 10,
-	"createDate": "02/12/2022 08:55:00",
-	"updateDate": "02/02/2023 17:16:03",
-	"annotations": "Próximo a garagem de ônibus Del Rey, ao lado da Concremix",
-	"status1": "1",
-	"status2": "1",
-	"conclusion": "3",
+	"createDate": "2023-03-09T21:38:59.9894222",
+	"updateDate": "2023-03-09T21:38:59.9894222",
+	"orderStatus": {
+		"annotations": [
+			"Contato realizado com o portador do cartão"
+		],
+		"status1": "1",
+		"status2": "2",
+		"conclusion": "3"
+	},
 	"issuerRelationship": true,
 	"orderInfo": {
 		"partnerOrderid": 1512,
@@ -25,108 +29,110 @@
 	},
 	"orderItems": [
 		{
-			"code": "Item Code",
-			"name": "Item description",
-			"amount": 10000,
+			"itemCode": "59845",
+			"itemName": "Iphone13 mini 256gb",
+			"amount": 530000,
 			"quantity": 1,
 			"categoryCode": 1,
-			"categoryName": "Item category name",
-			"isGift": true,
+			"categoryName": "Iphone13 mini 256gb",
+			"isGift": false,
 			"isMarketPlace": true,
-			"sellerName": "Seller Name",
-			"sellerDocument": "12345678910123",
-			"courier": "Shipping Company Name"
+			"sellerName": "Loja do Juquinha",
+			"sellerDocument": "52645678910",
+			"courier": "Fedex"
 		}
 	],
 	"billingData": {
-		"clientType": 1,
-		"document": "12345678910",
-		"name": "Complete Client Name",
-		"birthDate": "1990-01-10",
-		"email": "email@email.com.br",
-		"gender": "M",
+		"client": {
+			"clientType": 1,
+			"document": "12345678910",
+			"name": "John Ronald Tolkien",
+			"birthDate": "1988-02-10",
+			"email": "client@email.com.br",
+			"gender": "M"
+		},
 		"address": {
-			"street": "Street name example",
-			"number": "100",
-			"additionalInformation": "Additional information example",
-			"district": "district Example",
-			"city": "City Example",
+			"street": "Quincas Borba",
+			"number": "31",
+			"additionalInformation": "Bloco A - Apto 410",
+			"district": "Vila Nova Cachoeirinha",
+			"city": "São Paulo",
 			"state": "SP",
-			"zipcode": "12345678",
+			"zipcode": "08090-070",
 			"country": "Brasil",
-			"reference": "Address reference example"
+			"reference": "Proximo ao Shopping Bourbon"
 		},
 		"phones": [
 			{
 				"type": 1,
 				"ddi": 55,
 				"ddd": 11,
-				"phoneNumber": 33333333,
-				"extension": "1111"
+				"phoneNumber": 999999999,
+				"extension": "2552"
 			}
 		]
 	},
 	"shippingData": {
-		"clientType": 1,
-		"document": "12345678910",
-		"name": "Complete Client Name",
-		"birthDate": "1990-01-10",
-		"email": "email@email.com.br",
-		"gender": "M",
+		"client": {
+			"clientType": 1,
+			"document": "12345678910",
+			"name": "John Ronald Tolkien",
+			"birthDate": "1988-02-10",
+			"email": "client@email.com.br",
+			"gender": "M"
+		},
 		"address": {
-			"street": "Street name example",
-			"number": "100",
-			"additionalInformation": "Additional information example",
-			"district": "district Example",
-			"city": "City Example",
+			"street": "Quincas Borba",
+			"number": "31",
+			"additionalInformation": "Bloco A - Apto 410",
+			"district": "Vila Nova Cachoeirinha",
+			"city": "São Paulo",
 			"state": "SP",
-			"zipcode": "12345678",
+			"zipcode": "08090-070",
 			"country": "Brasil",
-			"reference": "Address reference example"
+			"reference": "Proximo ao Shopping Bourbon"
 		},
 		"phones": [
 			{
 				"type": 1,
 				"ddi": 55,
 				"ddd": 11,
-				"phoneNumber": 33333333,
-				"extension": "1111"
+				"phoneNumber": 999999999,
+				"extension": "2552"
 			}
 		],
 		"deliveryType": "1",
-		"deliveryTime": "2 dias úteis",
-		"shippingAmount": 55.59,
+		"deliveryTime": "5 dias úteis",
+		"shippingAmount": 5559,
 		"pickUpStoreDocument": "12345678910"
 	},
-	"paymentsData": [
-		{
-			"paymentDateTime": "2017-03-21T22:36:53.0000000",
-			"value": 2500,
-			"paymentMethod": 1,
-			"installmentsQuantity": 2,
-			"currency": 986,
-			"card": {
-				"maskedPAN": "123456xxxxxx1234",
-				"hash": "12345678945612301234569874563210",
-				"bin": "123456",
-				"end": "1234",
-				"brandCode": 1,
-				"validityDate": "02/2021",
-				"cardholderName": "John Ronald Tolkien",
-				"cardholderDocumentNumber": "00000000000",
-				"tid": "12345"
-			},
-			"address": {
-				"street": "Street name example",
-				"number": "10",
-				"additionalInformation": "Additional information example",
-				"district": "district Example",
-				"city": "City Example",
-				"state": "SP",
-				"zipcode": "12345678",
-				"country": "Brasil",
-				"reference": "Address reference example"
-			}
+	"paymentData": {
+		"paymentDateTime": "2023-03-09T21:38:59.9894222",
+		"amount": 15995,
+		"paymentMethod": 1,
+		"installmentsQuantity": 2,
+		"currency": 986,
+		"card": {
+			"maskedPAN": "123456xxxxxx1234",
+			"hash": "12345678945612301234569874563210",
+			"bin": "123456",
+			"end": "1234",
+			"brandCode": 1,
+			"validityDate": "05/2029",
+			"cardholderName": "John Ronald Tolkien",
+			"cardholderDocumentNumber": "12345678910",
+			"tid": "123548761315847680000"
+		},
+		"address": {
+			"street": "Quincas Borba",
+			"number": "31",
+			"additionalInformation": "Bloco A - Apto 410",
+			"district": "Vila Nova Cachoeirinha",
+			"city": "São Paulo",
+			"state": "SP",
+			"zipcode": "08090-070",
+			"country": "Brasil",
+			"reference": "Proximo ao Shopping Bourbon"
 		}
-	]
+	}
 }
