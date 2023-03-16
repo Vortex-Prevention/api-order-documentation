@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Swagger Vortex - Orders -> OpenAPI 3.0
+  title: Swagger Vortex - Order -> OpenAPI 3.0
   description: |-
     This is a project for documentation of API Contract of Order.
 
@@ -20,6 +20,7 @@ tags:
     externalDocs:
       description: Read more
       url: http://vortex-paas.com/doc/orders
+      
 paths:
   /orders/v1/order:
     post:
@@ -50,7 +51,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AddOrder"
+              $ref: "#/components/schemas/OrderBase"
         required: true
       responses:
         "201":
@@ -75,9 +76,8 @@ paths:
         "500":
           description: Internal Server Error
       security:
-        - partner_auth:
-            - write:orders
-            - read:orders
+        - vortexOauth:
+            - order
     get:
       tags:
         - Orders
@@ -107,8 +107,9 @@ paths:
         "500":
           description: Internal Server Error
       security:
-        - partner_auth:
-            - read:orders
+        - vortexOauth:
+            - order
+
   /orders/v1/orders/partnerId/{partnerId}:
     get:
       tags:
@@ -146,16 +147,16 @@ paths:
         "500":
           description: Internal Server Error
       security:
-        - partner_auth:
-            - write:orders
-            - read:orders
-  /orders/v1/order/partnerId/{partnerId}/partnerOrderid/{partnerOrderid}:
+        - vortexOauth:
+            - order
+
+  /orders/v1/order/partnerId/{partnerId}/partnerOrderId/{partnerOrderId}:
     get:
       tags:
         - Orders
       summary: Get an order
       description: Get an order with a specific code
-      operationId: findOrdersByPartnerOrderid
+      operationId: findOrdersByPartnerOrderId
       parameters:
         - name: Authorization
           in: header
@@ -165,7 +166,7 @@ paths:
           schema:
             type: string
             example: "Bearer GHViphopimn46871HAiouybo21594"
-        - name: partnerOrderid
+        - name: partnerOrderId
           in: path
           description: ID of partner to return
           required: true
@@ -186,10 +187,10 @@ paths:
         "500":
           description: Internal Server Error
       security:
-        - partner_auth:
-            - write:orders
-            - read:orders
-  /orders/v1/order/details/vortexOrderid/{vortexOrderid}:
+        - vortexOauth:
+            - order
+
+  /orders/v1/order/details/vortexOrderId/{vortexOrderId}:
     get:
       tags:
         - Orders
@@ -229,128 +230,171 @@ paths:
         "500":
           description: Internal Server Error
       security:
-        - partner_auth:
-            - write:orders
-            - read:orders
+        - vortexOauth:
+            - order
+            
 components:
   schemas:
-    AddOrder:
+    OrderBase:
       type: object
       properties:
         orderInfo:
+          description: |
+            Informações do pedido
+            Order infos
           $ref: "#/components/schemas/OrderInfo"
         orderItems:
           type: array
-          description: Descrição dos itens do pedido
+          description: |
+            Descrição dos itens do pedido
+            Order items description
           items:
             type: object
             $ref: "#/components/schemas/OrderItem"
         billingData:
+          description: |
+            Dados de cobrança.
+            Billing data
           $ref: "#/components/schemas/BillingData"
         shippingData:
+          description: |
+            Dados de entrega
+            Shipping data
           $ref: "#/components/schemas/ShippingData"
         paymentData:
+          description: |
+            Dados do pagamento
+            Payment data
           $ref: "#/components/schemas/PaymentsData"
 
     OrderDetails:
+      allOf:
+        - $ref: "#/components/schemas/OrderBase"
       type: object
       properties:
         partner:
           type: string
-          description: Nome da loja parceira
+          description: |
+            Nome da loja parceira
+
+
           example: MegaLeo
         score:
           type: integer
           format: int64
+          description: |
+            Pontuação de risco
+            Score
           example: 10
-        vortexOrderid:
-          type: integer
-          format: int64
-          description: Codigo do pedido Vortex
-          example: 10
+        vortexOrderId:
+          type: string
+          format: uuid
+          description: |
+            Codigo do pedido Vortex
+            Vortex Order ID
+          example: 9f190647-7615-43ab-9fc6-8129af51fbc4
         createDate:
           type: string
-          description: Data do pedido
+          description: |
+            Data de criação
+            Create date
           example: "2023-03-09T21:38:59.9894222"
         updateDate:
           type: string
-          description: Data do pedido
+          description: |
+            Data de atualização
+            Update date
           example: "2023-03-09T21:38:59.9894222"
         orderStatus:
+          description: |
+            Status do pedido
+            Status
           $ref: "#/components/schemas/OrderStatus"
         issuerRelationship:
           type: boolean
-          description: Nome da loja parceira
+          description: |
+            Relacionamento com emissor
+            Issuer relationship
           example: true
-        orderInfo:
-          $ref: "#/components/schemas/OrderInfo"
-        orderItems:
-          type: array
-          description: Descrição dos itens do pedido
-          items:
-            type: object
-            $ref: "#/components/schemas/OrderItem"
-        billingData:
-          $ref: "#/components/schemas/BillingData"
-        shippingData:
-          $ref: "#/components/schemas/ShippingData"
-        paymentData:
-          $ref: "#/components/schemas/PaymentsData"
-
+        
     OrderInfo:
       type: object
       properties:
-        partnerOrderid:
+        partnerOrderId:
           type: integer
           format: int64
-          description: Codigo do pedido loja parceira
+          description: |
+            Codigo do pedido loja parceira
+            Partner order ID
           example: 1512
         orderDateTime:
           type: string
-          description: Data do pedido
+          description: |
+            Data do pedido
+            Order date
           example: "2023-03-09T21:38:59.9894222"
         relationshipType:
           type: string
-          description: Type of relationship between customer and cardholder
+          description: |
+            Tipo de relacionamento entre cliente e titular
+            Type of relationship between customer and cardholder
           example: Amigos de trabalho
         amount:
           type: number
           format: double
-          description: Valor dos produtos
+          description: |
+            Valor dos itens
+            Items amount
           example: 10000
         totalAmount:
           type: number
           format: double
-          description: Valor total do pedido
+          description: |
+            Valor total do pedido
+            Total amount order
           example: 15995
         discountamount:
           type: number
           format: double
-          description: Valor do disconto aplicado
+          description: |
+            Valor do disconto aplicado
+            Discoint amount applied
           example: 0
         ip:
           type: string
-          description: The name of the ordering customer
+          description: |
+            IP do pedido
+            Order IP
           example: "192.168.0.1"
         isGift:
           type: boolean
-          description: The name of the ordering customer
+          description: |
+            É presente?
+            Is it gift?
           example: false
         originChannel:
           type: string
-          description: The name of the ordering customer
+          description: |
+            Canal de origem
+            Origin channel
           example: website
-        businessCode:
+        businessId:
           type: number
-          description: The name of the ordering customer
+          description: |
+            Código identificador de negócio
+            Business ID
           example: 1
-        partnerSegment:
+        MCC:
           type: number
-          description: The name of the ordering customer
+          description: |
+            Codigo de categoria do estabelecimento
+            Merchant category code
           example: 1
         SLA:
           type: number
-          description: The name of the ordering customer
+          description: |
+            Acordo de Nível de Serviço
+            Service Level Agreement
           example: 30
 
     OrderItem:
@@ -358,59 +402,89 @@ components:
       properties:
         itemCode:
           type: string
-          description: Name printed on card
+          description: |
+            Codigo do item
+
           example: "59845"
         itemName:
           type: string
-          description: The cardholder document
+          description: |
+            Nome do item
+
           example: Iphone13 mini 256gb
         amount:
           type: number
-          description: Order billing address
+          description: |
+            Valor unitario do item
+
           example: 530000
         quantity:
           type: number
-          description: Order billing address
+          description: |
+            Quantidade de itens
+
           example: 1
         categoryCode:
           type: number
-          description: Order billing address
+          description: |
+            Codigo de categoria
+
           example: 1
         categoryName:
           type: string
-          description: The cardholder document
+          description: |
+            Nome da categoria
+
           example: Iphone13 mini 256gb
         isGift:
           type: boolean
-          description: The name of the ordering customer
+          description: |
+            É presente?
+
           example: false
         isMarketPlace:
           type: boolean
-          description: The name of the ordering customer
+          description: |
+            É marketplace?
+
           example: true
         sellerName:
           type: string
-          description: Name printed on card
+          description: |
+            Nome do vendedor
+
           example: Loja do Juquinha
         sellerDocument:
           type: string
-          description: The cardholder document
+          description: |
+            Documento do vendedor
+
           example: 52645678910
         courier:
           type: string
-          description: The cardholder document
+          description: |
+            Transportadora
+
           example: Fedex
 
     BillingData:
       type: object
       properties:
         client:
+          description: |
+            Cliente da cobrança
+            
           $ref: "#/components/schemas/Client"
         address:
+          description: |
+            Endereço da cobrança
+            
           $ref: "#/components/schemas/Address"
         phones:
+          description: |
+            Telefones da cobrança
+
           type: array
-          description: Descrição dos itens do pedido
           items:
             type: object
             $ref: "#/components/schemas/Phone"
@@ -419,30 +493,46 @@ components:
       type: object
       properties:
         client:
+          description: |
+            Cliente da entrega
+
           $ref: "#/components/schemas/Client"
         address:
+          description: |
+            Cliente da entrega
+
           $ref: "#/components/schemas/Address"
         phones:
+          description: |
+            Cliente da entrega
+
           type: array
-          description: Descrição dos itens do pedido
           items:
             type: object
             $ref: "#/components/schemas/Phone"
         deliveryType:
           type: string
-          description: Name printed on card
+          description: |
+            Tipo de entrega
+
           example: 1
         deliveryTime:
           type: string
-          description: The cardholder document
+          description: |
+            Prazo de entrega
+
           example: 5 dias úteis
         shippingAmount:
           type: number
-          description: Order billing address
+          description: |
+            Valor do frete
+
           example: 5559
         pickUpStoreDocument:
           type: string
-          description: The cardholder document
+          description: |
+            Documento de retirada na loja
+
           example: 12345678910
 
     PaymentsData:
@@ -450,16 +540,22 @@ components:
       properties:
         paymentDateTime:
           type: string
-          description: Data do pedido
+          description: |
+            Data do pagamento
+
           example: "2023-03-09T21:38:59.9894222"
         amount:
           type: number
           format: double
-          description: Valor pago
+          description: |
+            Valor pago
+
           example: 15995
         paymentMethod:
           type: number
           description: |
+            Metodos de pagamento
+
             **The below table defines the metho code**
              | Method Code    | Method Name |
              | ---------------| ------------| 
@@ -477,15 +573,25 @@ components:
             - 5
         installmentsQuantity:
           type: integer
-          description: Number of installments
+          description: |
+            Quantidade de parcelas
+            Number of installments
           example: 2
         currency:
           type: integer
-          description: Number of installments
+          description: |
+            Moeda
+            Number of installments
           example: 986
         card:
+          description: |
+            Informações do cartão para os metodos credito, debito e voucher
+
           $ref: "#/components/schemas/Card"
         address:
+          description: |
+            Endereço do pagamento
+
           $ref: "#/components/schemas/Address"
 
     Client:
@@ -493,27 +599,39 @@ components:
       properties:
         clientType:
           type: number
-          description: Name printed on card
+          description: |
+            Tipo do cliente
+            Client type
           example: 1
         document:
           type: string
-          description: The cardholder document
+          description: |
+            Documento do cliente
+            The client document
           example: 12345678910
         name:
           type: string
-          description: The cardholder document
+          description: |
+            Nome do cliente
+            The client name
           example: John Ronald Tolkien
         birthDate:
           type: string
-          description: Name printed on card
+          description: |
+            Data de nascimento do cliente
+            Client birth date
           example: "1988-02-10"
         email:
           type: string
-          description: The cardholder document
+          description: |
+            E-mail do cliente
+            Client email
           example: client@email.com.br
         gender:
           type: string
-          description: The cardholder document
+          description: |
+            Genero
+            Gender
           example: M
 
     Address:
@@ -521,39 +639,57 @@ components:
       properties:
         street:
           type: string
-          description: Name printed on card
+          description: |
+            Logradouro
+
           example: Quincas Borba
         number:
           type: string
-          description: The cardholder document
+          description: |
+            Numero na rua
+
           example: 31
         additionalInformation:
           type: string
-          description: The cardholder document
+          description: |
+            Complemento
+
           example: Bloco A - Apto 410
         district:
           type: string
-          description: Name printed on card
+          description: |
+            Bairro
+            District
           example: Vila Nova Cachoeirinha
         city:
           type: string
-          description: The cardholder document
+          description: |
+            Cidade
+            City
           example: São Paulo
         state:
           type: string
-          description: The cardholder document
+          description: |
+            Estado
+            Province**
           example: SP
         zipcode:
           type: string
-          description: Name printed on card
+          description: |
+            CEP
+            Postal code / Zip code
           example: 08090-070
         country:
           type: string
-          description: The cardholder document
+          description: |
+            Pais
+            Country
           example: Brasil
         reference:
           type: string
-          description: The cardholder document
+          description: |
+            Ponto de referencia
+
           example: Proximo ao Shopping Bourbon
 
     Phone:
@@ -561,23 +697,32 @@ components:
       properties:
         type:
           type: number
-          description: Name printed on card
+          description: |
+            Tipo de telefone
+
           example: 1
         ddi:
           type: number
-          description: Name printed on card
+          description: |
+            DDI
           example: 55
         ddd:
           type: number
-          description: Name printed on card
+          description: |
+            DDD
+
           example: 11
         phoneNumber:
           type: number
-          description: Name printed on card
+          description: |
+            Numero de telefone
+            Phone number
           example: 999999999
         extension:
           type: string
-          description: The cardholder document
+          description: |
+            Ramal
+            Extension
           example: 2552
 
     Card:
@@ -585,23 +730,33 @@ components:
       properties:
         maskedPAN:
           type: string
-          description: Name printed on card
+          description: |
+            Cartão mascarado
+            Masked PAN
           example: 123456xxxxxx1234
         hash:
           type: string
-          description: The cardholder document
+          description: |
+            ***
+            The cardholder document
           example: "12345678945612301234569874563210"
         bin:
           type: string
-          description: The cardholder document
+          description: |
+            Bin
+            The cardholder document
           example: 123456
         end:
           type: string
-          description: Name printed on card
+          description: |
+            Final do cartão
+            Name printed on card
           example: 1234
         brandCode:
           type: number
           description: |
+            Codigo da bandeira
+            Brand code
             **The below table defines the brands code**
              | Method Code    | Method Name |
              | ---------------| ------------| 
@@ -609,23 +764,36 @@ components:
              | 2              | MasterCard  |
              | 3              | Diners      |
              | 4              | Outros      |
-
           example: 1
-        validityDate:
+        expirationMonth:
           type: string
-          description: The cardholder document
-          example: 05/2029
+          description: |
+            Mes de expiração do cartão
+            
+          example: 05
+        expirationYear:
+          type: string
+          description: |
+            Ano de expiração do cartão
+            
+          example: 2029
         cardholderName:
           type: string
-          description: Name printed on card
+          description: |
+            Nome impresso no cartão
+            Name printed on PAN
           example: John Ronald Tolkien
         cardholderDocumentNumber:
           type: string
-          description: The cardholder document
+          description: |
+            Documento do portador
+            The cardholder document
           example: 12345678910
         tid:
           type: string
-          description: The cardholder document
+          description: |
+            Identificador da transação
+            Transaction Id
           example: 123548761315847687436
 
     OrderStatus:
@@ -635,23 +803,34 @@ components:
           type: array
           items:
             type: string
-            description: Nome da loja parceira
+            description: |
+              Observações
+
             example: Contato realizado com o portador do cartão
         status1:
           type: string
-          description: Nome da loja parceira
+          description: |
+            Status do primeiro estimulo
+
           example: 1
         status2:
           type: string
-          description: Nome da loja parceira
+          description: |
+            Status do segundo estimulo            
+            
           example: 2
         conclusion:
           type: string
-          description: Nome da loja parceira
+          description: |
+            Conclusão do pedido
+
           example: 3
 
     OrdersList:
       type: object
+      description: |
+        Lista de pedidos
+
       properties:
         orders:
           type: array
@@ -663,21 +842,25 @@ components:
       properties:
         partner:
           type: string
-          description: Nome da loja parceira
+          description: |
+            Nome da loja parceira
           example: MegaLeo
-        vortexOrderid:
+        vortexOrderId:
+          type: string
+          format: uuid
+          description: |
+            Codigo do pedido Vortex
+          example: 9f190647-7615-43ab-9fc6-8129af51fbc4
+        partnerOrderId:
           type: integer
           format: int64
-          description: Codigo do pedido Vortex
-          example: 10
-        partnerOrderid:
-          type: integer
-          format: int64
-          description: Codigo do pedido loja parceira
+          description: |
+            Codigo do pedido loja parceira
           example: 1512
         orderDateTime:
           type: string
-          description: Data do pedido
+          description: |
+            Data do pedido
           example: "2023-03-09T21:38:59.9894222"
         orderStatus:
           $ref: "#/components/schemas/OrderStatus"
@@ -702,7 +885,8 @@ components:
           format: date-time
         status:
           type: string
-          description: Order Status
+          description: |
+            Order Status
           example: approved
           enum:
             - placed
@@ -732,22 +916,14 @@ components:
           schema:
             type: array
             items:
-              $ref: "#/components/schemas/AddOrder"
+              $ref: "#/components/schemas/OrderBase"
+
   securitySchemes:
-    partner_auth:
+    vortexOauth:
       type: oauth2
       flows:
         implicit:
           authorizationUrl: https://vortex-paas/v1/oauth/partner/{partnerId}
-          scopes:
-            order: toDo
-            user: toDo
-            partner: toDo
-    collaborators_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: https://vortex-paas/v1/oauth/collaborators/{userId}
           scopes:
             order: toDo
             user: toDo
