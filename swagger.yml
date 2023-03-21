@@ -124,10 +124,22 @@ paths:
                 $ref: "#/components/schemas/OrdersList"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/Unauthorized"
         "403":
-          description: Partner not allowed
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/Forbidden"
         "500":
-          description: Internal Server Error
+          description: Internal server error       
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/InternalServerError"
       security:
         - vortexOauth:
             - order
@@ -336,9 +348,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/OrderDetails"
-            application/xml:
+        "204":
+          description: Bad request
+          content:
+            application/json:
               schema:
-                $ref: "#/components/schemas/OrderDetails"
+                $ref: "#/components/responses/NoContent"
         "400":
           description: Bad request
           content:
@@ -537,67 +552,67 @@ components:
           type: string
           description: |
             Codigo do item
-
+            Item Code
           example: "59845"
         itemName:
           type: string
           description: |
             Nome do item
-
+            Item name
           example: Iphone13 mini 256gb
         amount:
           type: number
           description: |
             Valor unitario do item
-
+            Item unitary value
           example: 530000
         quantity:
           type: number
           description: |
             Quantidade de itens
-
+            Items quantity
           example: 1
         categoryCode:
           type: number
           description: |
             Codigo de categoria
-
+            Category code
           example: 1
         categoryName:
           type: string
           description: |
             Nome da categoria
-
+            Category name
           example: Iphone13 mini 256gb
         isGift:
           type: boolean
           description: |
             É presente?
-
+              Is it a gift?
           example: false
         isMarketPlace:
           type: boolean
           description: |
             É marketplace?
-
+              Is it a Marketplace?
           example: true
         sellerName:
           type: string
           description: |
             Nome do vendedor
-
+            Saler's name
           example: Loja do Juquinha
         sellerDocument:
           type: string
           description: |
             Documento do vendedor
-
+            Saler's document
           example: 52645678910
         courier:
           type: string
           description: |
             Transportadora
-
+            Carriers
           example: Fedex
 
     BillingData:
@@ -606,17 +621,17 @@ components:
         client:
           description: |
             Cliente da cobrança
-            
+            Billing's client
           $ref: "#/components/schemas/Client"
         address:
           description: |
             Endereço da cobrança
-            
+            Billing's address
           $ref: "#/components/schemas/Address"
         phones:
           description: |
             Telefones da cobrança
-
+            Billing's phone
           type: array
           items:
             type: object
@@ -628,17 +643,17 @@ components:
         client:
           description: |
             Cliente da entrega
-
+            Shipping's client
           $ref: "#/components/schemas/Client"
         address:
           description: |
             Cliente da entrega
-
+            Shipping's client
           $ref: "#/components/schemas/Address"
         phones:
           description: |
             Cliente da entrega
-
+            Shipping's client
           type: array
           items:
             type: object
@@ -647,25 +662,25 @@ components:
           type: string
           description: |
             Tipo de entrega
-
+            Shipping description
           example: 1
         deliveryTime:
           type: string
           description: |
             Prazo de entrega
-
+            Shipping deadline
           example: 5 dias úteis
         shippingAmount:
           type: number
           description: |
             Valor do frete
-
+            Porterage's value
           example: 5559
         pickUpStoreDocument:
           type: string
           description: |
             Documento de retirada na loja
-
+            Store retreat document
           example: 12345678910
 
     PaymentsData:
@@ -675,28 +690,28 @@ components:
           type: string
           description: |
             Data do pagamento
-
+            Payday
           example: "2023-03-09T21:38:59.9894222"
         amount:
           type: number
           format: double
           description: |
             Valor pago
-
+            Amount paid
           example: 15995
         paymentMethod:
           type: number
           description: |
             Metodos de pagamento
-
+            Payment methods
             **The below table defines the metho code**
-             | Method Code    | Method Name |
-             | ---------------| ------------| 
-             | 1              | credit      | 
-             | 2              | debit       |
-             | 3              | pix         |
-             | 4              | voucher     |
-             | 5              | transfer    |
+            | Method Code    | Method Name |
+            | ---------------| ------------| 
+            | 1              | credit      | 
+            | 2              | debit       |
+            | 3              | pix         |
+            | 4              | voucher     |
+            | 5              | transfer    |
           example: 1
           enum:
             - 1
@@ -714,7 +729,7 @@ components:
           type: integer
           description: |
             Moeda
-            Number of installments
+            Currency
           example: 986
         card:
           description: |
@@ -724,7 +739,7 @@ components:
         address:
           description: |
             Endereço do pagamento
-
+            Payment Address
           $ref: "#/components/schemas/Address"
 
     Client:
@@ -740,25 +755,25 @@ components:
           type: string
           description: |
             Documento do cliente
-            The client document
+            Client's document
           example: 12345678910
         name:
           type: string
           description: |
             Nome do cliente
-            The client name
+            Client's name
           example: John Ronald Tolkien
         birthDate:
           type: string
           description: |
             Data de nascimento do cliente
-            Client birth date
+            Client's date of birth
           example: "1988-02-10"
         email:
           type: string
           description: |
             E-mail do cliente
-            Client email
+            Client's email
           example: client@email.com.br
         gender:
           type: string
@@ -774,19 +789,19 @@ components:
           type: string
           description: |
             Logradouro
-
+            Address
           example: Quincas Borba
         number:
           type: string
           description: |
             Numero na rua
-
+            Address number
           example: 31
         additionalInformation:
           type: string
           description: |
             Complemento
-
+            Complement
           example: Bloco A - Apto 410
         district:
           type: string
@@ -804,7 +819,7 @@ components:
           type: string
           description: |
             Estado
-            Province**
+            Estate
           example: SP
         zipcode:
           type: string
@@ -822,7 +837,7 @@ components:
           type: string
           description: |
             Ponto de referencia
-
+            Landmark
           example: Proximo ao Shopping Bourbon
 
     Phone:
@@ -832,7 +847,7 @@ components:
           type: number
           description: |
             Tipo de telefone
-
+            Phone type
           example: 1
         ddi:
           type: number
@@ -843,7 +858,7 @@ components:
           type: number
           description: |
             DDD
-
+            Area code
           example: 11
         phoneNumber:
           type: number
@@ -891,36 +906,36 @@ components:
             Codigo da bandeira
             Brand code
             **The below table defines the brands code**
-             | Method Code    | Method Name |
-             | ---------------| ------------| 
-             | 1              | Visa        | 
-             | 2              | MasterCard  |
-             | 3              | Diners      |
-             | 4              | Outros      |
+            | Method Code    | Method Name |
+            | ---------------| ------------| 
+            | 1              | Visa        | 
+            | 2              | MasterCard  |
+            | 3              | Diners      |
+            | 4              | Outros      |
           example: 1
         expirationMonth:
           type: string
           description: |
             Mes de expiração do cartão
-            
+            Month's date of expiration
           example: 05
         expirationYear:
           type: string
           description: |
             Ano de expiração do cartão
-            
+            Year's date of expiration
           example: 2029
         cardholderName:
           type: string
           description: |
             Nome impresso no cartão
-            Name printed on PAN
+            Card's printed name
           example: John Ronald Tolkien
         cardholderDocumentNumber:
           type: string
           description: |
             Documento do portador
-            The cardholder document
+            Cardholder's document
           example: 12345678910
         tid:
           type: string
@@ -938,32 +953,32 @@ components:
             type: string
             description: |
               Observações
-
+              Observations
             example: Contato realizado com o portador do cartão
         status1:
           type: string
           description: |
             Status do primeiro estimulo
-
+            First stimulus status
           example: 1
         status2:
           type: string
           description: |
             Status do segundo estimulo            
-            
+            Second stimulus stimulus
           example: 2
         conclusion:
           type: string
           description: |
             Conclusão do pedido
-
+            Order's finalized
           example: 3
 
     OrdersList:
       type: object
       description: |
         Lista de pedidos
-
+        Order's list
       properties:
         orders:
           type: array
@@ -977,27 +992,27 @@ components:
           type: string
           description: |
             Nome da loja parceira
-
+            Partner's store name
           example: MegaLeo
         vortexOrderId:
           type: string
           format: uuid
           description: |
             Codigo do pedido Vortex
-
+            Vortex order code
           example: 9f190647-7615-43ab-9fc6-8129af51fbc4
         partnerOrderId:
           type: integer
           format: int64
           description: |
             Codigo do pedido loja parceira
-
+            Partner's store order code
           example: 1512
         orderDateTime:
           type: string
           description: |
             Data do pedido
-
+            Order's date
           example: "2023-03-09T21:38:59.9894222"
         orderStatus:
           description: |
@@ -1019,6 +1034,10 @@ components:
           example: Response message
 
   responses:
+    NoContent:
+      description: |
+        No Content
+      $ref: '#/components/schemas/Error'
     BadRequest:
       description: |
         Bad Request
