@@ -284,13 +284,14 @@ paths:
           schema:
             type: string
             example: "Bearer GHViphopimn46871HAiouybo21594"
-        - in: path
-          name: vortexOrderId
+        - name: vortexOrderId
+          in: path
           description: Vortex Order ID
           required: true
           schema:
             type: string
             format: uuid
+            example: 9f190647-7615-43ab-9fc6-8129af51fbc4
       responses:
         "200":
           description: Successful operation
@@ -342,14 +343,14 @@ paths:
           schema:
             type: string
             example: "71HAiouphopG68imnybo2159HVi44"
-        - name: partnerId
-          in: header
-          description: Partner's ID
+        - name: vortexOrderId
+          in: path
+          description: Vortex Order ID
           required: true
           schema:
             type: string
             format: uuid
-            example: c884f438-c850-11ed-afa1-0242ac120002
+            example: 9f190647-7615-43ab-9fc6-8129af51fbc4
       responses:
         "200":
           description: Successful operation
