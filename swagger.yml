@@ -284,8 +284,8 @@ paths:
           schema:
             type: string
             example: "Bearer GHViphopimn46871HAiouybo21594"
-        - name: vortexOrderId
-          in: path
+        - in: path
+          name: vortexOrderId
           description: Vortex Order ID
           required: true
           schema:
