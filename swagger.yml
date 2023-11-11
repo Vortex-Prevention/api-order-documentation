@@ -15,17 +15,17 @@ info:
 servers:
   - url: https://vortex-paas.sand-box.com
 tags:
-  - name: Ticket
-    description: Everything about your Ticket
+  - name: Orders
+    description: Everything about your Orders
     externalDocs:
       description: Read more
-      url: http://vortex-paas.com/doc/ticket
+      url: http://vortex-paas.com/doc/orders
       
 paths:
-  /analyzer/v1/order:
+  /orders/v1/order:
     post:
       tags:
-        - Ticket
+        - Orders
       summary: Add a new order
       description: Adding a new order from a partner
       operationId: addOrder
@@ -96,16 +96,15 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/responses/InternalServerError"
+
       security:
         - vortexOauth:
             - order
-
-  /analyzer/v1/tickets:
     get:
       tags:
-        - Ticket
-      summary: Get a list of all tickets
-      description: Get a list of all tickets in
+        - Orders
+      summary: Get a list of all orders
+      description: Get a list of all orders in
       operationId: findOrders
       parameters:
         - name: Authorization
@@ -145,13 +144,13 @@ paths:
         - vortexOauth:
             - order
 
-  /analyzer/v1/tickets/partnerId:
+  /orders/v1/orders/partnerId:
     get:
       tags:
-        - Ticket
-      summary: Get a list of Tickets
-      description: Get a list of Tickets from a particular partner
-      operationId: findTicketsByPartnerId
+        - Orders
+      summary: Get a list of orders
+      description: Get a list of orders from a particular partner
+      operationId: findOrdersByPartnerId
       parameters:
         - name: Authorization
           in: header
@@ -204,13 +203,13 @@ paths:
         - vortexOauth:
             - order
 
-  /analyzer/v1/ticket/partnerId/reference/{reference}:
+  /orders/v1/order/partnerId/reference/{reference}:
     get:
       tags:
-        - Ticket
-      summary: Get an Ticket
-      description: Get an Ticket with a specific reference
-      operationId: findTicketByReference
+        - Orders
+      summary: Get an order
+      description: Get an order with a specific code
+      operationId: findOrdersByreference
       parameters:
         - name: Authorization
           in: header
@@ -269,13 +268,13 @@ paths:
         - vortexOauth:
             - order
 
-  /analyzer/v1/ticket/{ticket}/details:
+  /orders/v1/order/details/ticket/{ticket}:
     get:
       tags:
-        - Ticket
-      summary: Get an Ticket details
-      description: Get an Ticket details by internal ticket
-      operationId: findTicketDetailsByInternalTicket
+        - Orders
+      summary: Get an orders details
+      description: Get an orders details by internal order id
+      operationId: findOrdersDetailsByInternalOrderId
       parameters:
         - name: Authorization
           in: header
@@ -287,7 +286,7 @@ paths:
             example: "Bearer GHViphopimn46871HAiouybo21594"
         - name: ticket
           in: path
-          description: Vortex ticket ID
+          description: Vortex Order ID
           required: true
           schema:
             type: string
@@ -332,10 +331,10 @@ paths:
             - order
     patch:
       tags:
-        - Ticket
-      summary: Update a Ticket details
-      description: Update a Ticket details by internal ticket
-      operationId: updateTicketDetailsByInternalTicketId
+        - Orders
+      summary: Update an orders details
+      description: Update an orders details by internal order id
+      operationId: updateOrdersDetailsByInternalOrderId
       parameters:
         - name: x-api-key 
           in: header
@@ -346,7 +345,7 @@ paths:
             example: "71HAiouphopG68imnybo2159HVi44"
         - name: ticket
           in: path
-          description: Vortex ticket ID
+          description: Vortex Order ID
           required: true
           schema:
             type: string
@@ -436,7 +435,7 @@ components:
       required:
         - partnerId
         - ticket
-        - status
+        - orderStatus
       properties:
         partnerId:
           type: string
@@ -457,8 +456,8 @@ components:
           type: string
           format: uuid
           description: |
-            Codigo do ticket Vortex
-            Vortex ticket ID
+            Codigo do pedido Vortex
+            Vortex Order ID
           example: 9f190647-7615-43ab-9fc6-8129af51fbc4
         createDate:
           type: string
@@ -472,11 +471,11 @@ components:
             Data de atualização
             Update date
           example: "2023-03-09T21:38:59.9894222"
-        ticketStatus:
+        orderStatus:
           description: |
             Status do pedido
             Status
-          $ref: "#/components/schemas/TicketStatus"
+          $ref: "#/components/schemas/OrderStatus"
         issuerRelationship:
           type: boolean
           description: |
@@ -539,12 +538,6 @@ components:
             IP do pedido
             Order IP
           example: "192.168.0.1"
-        isGift:
-          type: boolean
-          description: |
-            É presente?
-            Is it gift?
-          example: false
         originChannel:
           type: string
           description: |
@@ -570,69 +563,9 @@ components:
             Service Level Agreement
           example: 30
 
-    Item:
+    ShippingInfo:
       type: object
       properties:
-        itemCode:
-          type: string
-          description: |
-            Codigo do item
-            Item Code
-          example: "59845"
-        itemName:
-          type: string
-          description: |
-            Nome do item
-            Item name
-          example: Iphone13 mini 256gb
-        amount:
-          type: number
-          description: |
-            Valor unitario do item
-            Item unitary value
-          example: 530000
-        quantity:
-          type: number
-          description: |
-            Quantidade de itens
-            Items quantity
-          example: 1
-        categoryCode:
-          type: number
-          description: |
-            Codigo de categoria
-            Category code
-          example: 1
-        categoryName:
-          type: string
-          description: |
-            Nome da categoria
-            Category name
-          example: Smartphone
-        isGift:
-          type: boolean
-          description: |
-            É presente?
-              Is it a gift?
-          example: false
-        isMarketPlace:
-          type: boolean
-          description: |
-            É marketplace?
-              Is it a Marketplace?
-          example: true
-        sellerName:
-          type: string
-          description: |
-            Nome do vendedor
-            Saler's name
-          example: Loja do Juquinha
-        sellerDocument:
-          type: string
-          description: |
-            Documento do vendedor
-            Saler's document
-          example: 52645678910
         courier:
           type: string
           description: |
@@ -663,6 +596,80 @@ components:
             Documento de retirada na loja
             Store retreat document
           example: 12345678910
+
+    Item:
+      type: object
+      properties:
+        itemCode:
+          type: string
+          description: |
+            Código do item
+            Item Code
+          example: "59845"
+        itemName:
+          type: string
+          description: |
+            Nome do item
+            Item name
+          example: Iphone13 mini 256gb
+        amount:
+          type: number
+          description: |
+            Valor unitário do item
+            Item unitary value
+          example: 530000
+        quantity:
+          type: number
+          description: |
+            Quantidade de itens
+            Items quantity
+          example: 1
+        categoryCode:
+          type: number
+          description: |
+            Código de categoria
+            Category code
+          example: 1
+        categoryName:
+          type: string
+          description: |
+            Nome da categoria
+            Category name
+          example: Smartphone
+        isGift:
+          type: boolean
+          description: |
+            É presente?
+            Is it a gift?
+          example: false
+        isMarketPlace:
+          type: boolean
+          description: |
+            É marketplace?
+            Is it a Marketplace?
+          example: true
+        sellerInfo:
+          $ref: "#/components/schemas/SellerInfo"
+        shippingInfo:
+          $ref: "#/components/schemas/ShippingInfo"
+
+    SellerInfo:
+      type: object
+      properties:
+        sellerName:
+          type: string
+          description: |
+            Nome do vendedor
+            Seller's name
+          example: Loja do Juquinha
+        sellerDocument:
+          type: string
+          description: |
+            Documento do vendedor
+            Seller's document
+          example: 52645678910
+
+
 
     Billing:
       type: object
@@ -712,38 +719,24 @@ components:
       type: object
       properties:
         client:
-          description: |
-            Cliente da entrega
-            Shipping's client
           $ref: "#/components/schemas/Client"
         address:
-          description: |
-            Cliente da entrega
-            Shipping's client
           $ref: "#/components/schemas/Address"
         phones:
-          description: |
-            Cliente da entrega
-            Shipping's client
           type: array
           items:
-            type: object
             $ref: "#/components/schemas/Phone"
-        paymentDateTime:
-          type: string
-          description: |
-            Data do pagamento
-            Payday
-          example: "2023-03-09T21:38:59.9894222"
         amount:
           type: number
-          format: double
-          description: |
-            Valor pago
-            Amount paid
+          description: "Valor pago"
           example: 15995
+        currency:
+          type: integer
+          description: "Moeda"
+          example: 986
+
         paymentMethod:
-          type: number
+          type: string
           description: |
             Metodos de pagamento
             Payment methods
@@ -755,19 +748,146 @@ components:
             | 3              | pix         |
             | 4              | voucher     |
             | 5              | transfer    |
-          example: 1
+          example: credit
           enum:
-            - 1
-            - 2
-            - 3
-            - 4
-            - 5
-        currency:
+            - credit  
+            - debit   
+            - pix     
+            - voucher 
+            - transfer
+        paymentDetails:
+          oneOf:
+            - $ref: "#/components/schemas/TransferPayment"
+            - $ref: "#/components/schemas/CreditCardPayment"
+            - $ref: "#/components/schemas/DebitCardPayment"
+            - $ref: "#/components/schemas/PixPayment"
+            - $ref: "#/components/schemas/VoucherPayment"
+            
+
+    CreditCardPayment:
+      type: object
+      properties:
+        card:
+          $ref: "#/components/schemas/Card"
+        authentication:
+          $ref: "#/components/schemas/Authentication"
+        capture:
+          type: boolean
+          example: false
+        descriptor:
+          type: string
+          example: "ECOMMERCE MERCHANT"
+        recurrence:
+          type: boolean
+          example: false
+        installments:
           type: integer
-          description: |
-            Moeda
-            Currency
-          example: 986
+          example: 1
+
+
+    DebitCardPayment:
+      type: object
+      properties:
+        card:
+          $ref: "#/components/schemas/Card"
+        authentication:
+          $ref: "#/components/schemas/Authentication"
+        descriptor:
+          type: string
+          example: "ECOMMERCE MERCHANT"
+        recurrence:
+          type: boolean
+          example: false  
+
+
+    PixPayment:
+      type: object
+      properties:
+        pixInfo:
+          type: string
+          description: "Informações do Pix"
+          example: "Chave: 1234567890"
+
+    VoucherPayment:
+      type: object
+      properties:
+        voucherCode:
+          type: string
+          description: "Código do voucher"
+          example: "VOUCHER123"
+
+    TransferPayment:
+      type: object
+      properties:
+        senderInfo:
+          $ref: "#/components/schemas/TransferPartyInfo"
+        recipientInfo:
+          $ref: "#/components/schemas/TransferPartyInfo"
+      description: "Informações da transferência"
+      example:
+        senderInfo:
+          name: Remetente
+          document: Documento Remetente
+          bank: "Banco Remetente"
+          branch: "Agência Remetente"
+          account: "Conta Remetente"
+        recipientInfo:
+          name: Destinatário
+          document: Documento Destinatário
+          bank: "Banco Destinatário"
+          branch: "Agência Destinatária"
+          account: "Conta Destinatária"
+
+          
+    TransferPartyInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "Nome do titular da conta"
+          example: "Nome do Titular"
+        document:
+          type: string
+          description: "Número do documento do titular"
+          example: "123.456.789-01"
+        bank:
+          type: string
+          description: "Nome do banco"
+          example: "Banco XYZ"
+        branch:
+          type: string
+          description: "Número da agência"
+          example: "1234"
+        account:
+          type: string
+          description: "Número da conta"
+          example: "5678"
+
+    Authentication:
+      type: object
+      properties:
+        type:
+          type: string
+          example: "3Dsecure"
+        "3Dsecure":
+          type: object
+          properties:
+            mpi:
+              type: string
+              example: "thirdParty"
+            eci:
+              type: string
+              example: "05"
+            cavv:
+              type: string
+              example: "BwABBylVaQAAAAFwllVpAAAAAAA="
+            dsTransactionId:
+              type: string
+              example: "Nmp3VFdWMlEwZ05pWGN3SGo4TDA="
+            version:
+              type: string
+              example: "2"
+
 
     Client:
       type: object
@@ -952,26 +1072,9 @@ components:
             Ano de expiração do cartão
             Year's date of expiration
           example: 2029
-        cardholderName:
-          type: string
-          description: |
-            Nome impresso no cartão
-            Card's printed name
-          example: John Ronald Tolkien
-        cardholderDocumentNumber:
-          type: string
-          description: |
-            Documento do portador
-            Cardholder's document
-          example: 12345678910
-        tid:
-          type: string
-          description: |
-            Identificador da transação
-            Transaction Id
-          example: 123548761315847687436
 
-    TicketStatus:
+
+    OrderStatus:
       type: object
       properties:
         annotations:
@@ -981,13 +1084,25 @@ components:
             description: |
               Observações
               Observations
-            example: Direcionado a mesa de analise
-        status:
+            example: Contato realizado com o portador do cartão
+        status1:
           type: string
           description: |
-            Status
-            Status
-          example: pending
+            Status do primeiro estimulo
+            First stimulus status
+          example: 1
+        status2:
+          type: string
+          description: |
+            Status do segundo estimulo            
+            Second stimulus stimulus
+          example: 2
+        conclusion:
+          type: string
+          description: |
+            Conclusão do pedido
+            Order's finalized
+          example: 3
 
     OrdersList:
       type: object
@@ -1020,8 +1135,8 @@ components:
           type: string
           format: uuid
           description: |
-            Codigo do ticket Vortex
-            Vortex ticket ID
+            Codigo do pedido Vortex
+            Vortex Order ID
           example: 9f190647-7615-43ab-9fc6-8129af51fbc4
         reference:
           type: string
@@ -1035,11 +1150,11 @@ components:
             Data do pedido
             Order's date
           example: "2023-03-09T21:38:59.9894222"
-        ticketStatus:
+        orderStatus:
           description: |
             Status do pedido
             Order status
-          $ref: "#/components/schemas/TicketStatus"
+          $ref: "#/components/schemas/OrderStatus"
         
     Error:
       type: object
