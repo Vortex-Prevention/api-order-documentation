@@ -472,11 +472,11 @@ components:
             Data de atualização
             Update date
           example: "2023-03-09T21:38:59.9894222"
-        orderStatus:
+        ticketStatus:
           description: |
             Status do pedido
             Status
-          $ref: "#/components/schemas/OrderStatus"
+          $ref: "#/components/schemas/TicketStatus"
         issuerRelationship:
           type: boolean
           description: |
@@ -1075,7 +1075,7 @@ components:
           example: 2029
 
 
-    OrderStatus:
+    TicketStatus:
       type: object
       properties:
         annotations:
@@ -1085,25 +1085,14 @@ components:
             description: |
               Observações
               Observations
-            example: Contato realizado com o portador do cartão
-        status1:
+            example: analyser request recived
+        status:
           type: string
           description: |
-            Status do primeiro estimulo
-            First stimulus status
-          example: 1
-        status2:
-          type: string
-          description: |
-            Status do segundo estimulo            
-            Second stimulus stimulus
-          example: 2
-        conclusion:
-          type: string
-          description: |
-            Conclusão do pedido
-            Order's finalized
-          example: 3
+            Status
+            Status
+          example: pending
+
 
     OrdersList:
       type: object
@@ -1151,11 +1140,11 @@ components:
             Data do pedido
             Order's date
           example: "2023-03-09T21:38:59.9894222"
-        orderStatus:
+        ticketStatus:
           description: |
             Status do pedido
             Order status
-          $ref: "#/components/schemas/OrderStatus"
+          $ref: "#/components/schemas/TicketStatus"
         
     Error:
       type: object
