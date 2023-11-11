@@ -203,13 +203,13 @@ paths:
         - vortexOauth:
             - order
 
-  /orders/v1/order/partnerId/partnerOrderId/{partnerOrderId}:
+  /orders/v1/order/partnerId/reference/{reference}:
     get:
       tags:
         - Orders
       summary: Get an order
       description: Get an order with a specific code
-      operationId: findOrdersByPartnerOrderId
+      operationId: findOrdersByreference
       parameters:
         - name: Authorization
           in: header
@@ -219,7 +219,7 @@ paths:
           schema:
             type: string
             example: "Bearer GHViphopimn46871HAiouybo21594"
-        - name: partnerOrderId
+        - name: reference
           in: path
           description: Partner's store order ID
           required: true
@@ -268,7 +268,7 @@ paths:
         - vortexOauth:
             - order
 
-  /orders/v1/order/details/vortexOrderId/{vortexOrderId}:
+  /orders/v1/order/details/ticket/{ticket}:
     get:
       tags:
         - Orders
@@ -284,7 +284,7 @@ paths:
           schema:
             type: string
             example: "Bearer GHViphopimn46871HAiouybo21594"
-        - name: vortexOrderId
+        - name: ticket
           in: path
           description: Vortex Order ID
           required: true
@@ -298,10 +298,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OrderDetails"
+                $ref: "#/components/schemas/details"
             application/xml:
               schema:
-                $ref: "#/components/schemas/OrderDetails"
+                $ref: "#/components/schemas/details"
         "400":
           description: Bad request
           content:
@@ -343,7 +343,7 @@ paths:
           schema:
             type: string
             example: "71HAiouphopG68imnybo2159HVi44"
-        - name: vortexOrderId
+        - name: ticket
           in: path
           description: Vortex Order ID
           required: true
@@ -357,7 +357,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OrderDetails"
+                $ref: "#/components/schemas/details"
         "204":
           description: Bad request
           content:
@@ -396,42 +396,45 @@ components:
     OrderBase:
       type: object
       properties:
-        orderInfo:
+        info:
           description: |
             Informações do pedido
             Order infos
-          $ref: "#/components/schemas/OrderInfo"
-        orderItems:
+          $ref: "#/components/schemas/Info"
+        items:
           type: array
           description: |
             Descrição dos itens do pedido
             Order items description
           items:
             type: object
-            $ref: "#/components/schemas/OrderItem"
-        billingData:
+            $ref: "#/components/schemas/Item"
+        billing:
           description: |
             Dados de cobrança.
             Billing data
-          $ref: "#/components/schemas/BillingData"
-        shippingData:
+          $ref: "#/components/schemas/Billing"
+        shipping:
           description: |
             Dados de entrega
             Shipping data
-          $ref: "#/components/schemas/ShippingData"
-        paymentData:
+          $ref: "#/components/schemas/Shipping"
+        payments:
           description: |
             Dados do pagamento
             Payment data
-          $ref: "#/components/schemas/PaymentsData"
+          type: array
+          items:
+            type: object
+            $ref: "#/components/schemas/Payment"
 
-    OrderDetails:
+    details:
       allOf:
         - $ref: "#/components/schemas/OrderBase"
       type: object
       required:
         - partnerId
-        - vortexOrderId
+        - ticket
         - orderStatus
       properties:
         partnerId:
@@ -449,7 +452,7 @@ components:
             Pontuação de risco
             Score
           example: 10
-        vortexOrderId:
+        ticket:
           type: string
           format: uuid
           description: |
@@ -480,17 +483,17 @@ components:
             Issuer relationship
           example: true
         
-    OrderInfo:
+    Info:
       type: object
       required:
-        - partnerOrderId
+        - reference
         - orderDateTime
         - amount
         - totalAmount
         - originChannel
         - businessId
       properties:
-        partnerOrderId:
+        reference:
           type: string
           description: |
             Codigo do pedido loja parceira
@@ -566,7 +569,7 @@ components:
             Service Level Agreement
           example: 30
 
-    OrderItem:
+    Item:
       type: object
       properties:
         itemCode:
@@ -604,7 +607,7 @@ components:
           description: |
             Nome da categoria
             Category name
-          example: Iphone13 mini 256gb
+          example: Smartphone
         isGift:
           type: boolean
           description: |
@@ -635,8 +638,32 @@ components:
             Transportadora
             Carriers
           example: Fedex
+        shippingType:
+          type: string
+          description: |
+            Tipo de entrega
+            Shipping description
+          example: 1
+        shippingTime:
+          type: string
+          description: |
+            Prazo de entrega
+            Shipping deadline
+          example: 5 dias úteis
+        shippingAmount:
+          type: number
+          description: |
+            Valor do frete
+            Porterage's value
+          example: 5559
+        pickUpStoreDocument:
+          type: string
+          description: |
+            Documento de retirada na loja
+            Store retreat document
+          example: 12345678910
 
-    BillingData:
+    Billing:
       type: object
       properties:
         client:
@@ -658,7 +685,7 @@ components:
             type: object
             $ref: "#/components/schemas/Phone"
 
-    ShippingData:
+    Shipping:
       type: object
       properties:
         client:
@@ -679,34 +706,28 @@ components:
           items:
             type: object
             $ref: "#/components/schemas/Phone"
-        deliveryType:
-          type: string
-          description: |
-            Tipo de entrega
-            Shipping description
-          example: 1
-        deliveryTime:
-          type: string
-          description: |
-            Prazo de entrega
-            Shipping deadline
-          example: 5 dias úteis
-        shippingAmount:
-          type: number
-          description: |
-            Valor do frete
-            Porterage's value
-          example: 5559
-        pickUpStoreDocument:
-          type: string
-          description: |
-            Documento de retirada na loja
-            Store retreat document
-          example: 12345678910
 
-    PaymentsData:
+    Payment:
       type: object
       properties:
+        client:
+          description: |
+            Cliente da entrega
+            Shipping's client
+          $ref: "#/components/schemas/Client"
+        address:
+          description: |
+            Cliente da entrega
+            Shipping's client
+          $ref: "#/components/schemas/Address"
+        phones:
+          description: |
+            Cliente da entrega
+            Shipping's client
+          type: array
+          items:
+            type: object
+            $ref: "#/components/schemas/Phone"
         paymentDateTime:
           type: string
           description: |
@@ -740,28 +761,12 @@ components:
             - 3
             - 4
             - 5
-        installmentsQuantity:
-          type: integer
-          description: |
-            Quantidade de parcelas
-            Number of installments
-          example: 2
         currency:
           type: integer
           description: |
             Moeda
             Currency
           example: 986
-        card:
-          description: |
-            Informações do cartão para os metodos credito, debito e voucher
-
-          $ref: "#/components/schemas/Card"
-        address:
-          description: |
-            Endereço do pagamento
-            Payment Address
-          $ref: "#/components/schemas/Address"
 
     Client:
       type: object
@@ -854,7 +859,7 @@ components:
             Pais
             Country
           example: Brasil
-        reference:
+        complement:
           type: string
           description: |
             Ponto de referencia
@@ -1022,14 +1027,14 @@ components:
             Nome da loja parceira
             Partner's store name
           example: MegaLeo
-        vortexOrderId:
+        ticket:
           type: string
           format: uuid
           description: |
             Codigo do pedido Vortex
             Vortex Order ID
           example: 9f190647-7615-43ab-9fc6-8129af51fbc4
-        partnerOrderId:
+        reference:
           type: string
           description: |
             Codigo do pedido loja parceira
