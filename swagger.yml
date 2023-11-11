@@ -15,17 +15,17 @@ info:
 servers:
   - url: https://vortex-paas.sand-box.com
 tags:
-  - name: Orders
-    description: Everything about your Orders
+  - name: Ticket
+    description: Everything about your Ticket
     externalDocs:
       description: Read more
-      url: http://vortex-paas.com/doc/orders
+      url: http://vortex-paas.com/doc/ticket
       
 paths:
-  /orders/v1/order:
+  /analyzer/v1/order:
     post:
       tags:
-        - Orders
+        - Ticket
       summary: Add a new order
       description: Adding a new order from a partner
       operationId: addOrder
@@ -96,15 +96,16 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/responses/InternalServerError"
-
       security:
         - vortexOauth:
             - order
+
+  /analyzer/v1/tickets:
     get:
       tags:
-        - Orders
-      summary: Get a list of all orders
-      description: Get a list of all orders in
+        - Ticket
+      summary: Get a list of all tickets
+      description: Get a list of all tickets in
       operationId: findOrders
       parameters:
         - name: Authorization
@@ -144,13 +145,13 @@ paths:
         - vortexOauth:
             - order
 
-  /orders/v1/orders/partnerId:
+  /analyzer/v1/tickets/partnerId:
     get:
       tags:
-        - Orders
-      summary: Get a list of orders
-      description: Get a list of orders from a particular partner
-      operationId: findOrdersByPartnerId
+        - Ticket
+      summary: Get a list of Tickets
+      description: Get a list of Tickets from a particular partner
+      operationId: findTicketsByPartnerId
       parameters:
         - name: Authorization
           in: header
@@ -203,13 +204,13 @@ paths:
         - vortexOauth:
             - order
 
-  /orders/v1/order/partnerId/reference/{reference}:
+  /analyzer/v1/ticket/partnerId/reference/{reference}:
     get:
       tags:
-        - Orders
-      summary: Get an order
-      description: Get an order with a specific code
-      operationId: findOrdersByreference
+        - Ticket
+      summary: Get an Ticket
+      description: Get an Ticket with a specific reference
+      operationId: findTicketByReference
       parameters:
         - name: Authorization
           in: header
@@ -268,13 +269,13 @@ paths:
         - vortexOauth:
             - order
 
-  /orders/v1/order/details/ticket/{ticket}:
+  /analyzer/v1/ticket/{ticket}/details:
     get:
       tags:
-        - Orders
-      summary: Get an orders details
-      description: Get an orders details by internal order id
-      operationId: findOrdersDetailsByInternalOrderId
+        - Ticket
+      summary: Get an Ticket details
+      description: Get an Ticket details by internal ticket
+      operationId: findTicketDetailsByInternalTicket
       parameters:
         - name: Authorization
           in: header
@@ -286,7 +287,7 @@ paths:
             example: "Bearer GHViphopimn46871HAiouybo21594"
         - name: ticket
           in: path
-          description: Vortex Order ID
+          description: Vortex ticket ID
           required: true
           schema:
             type: string
@@ -331,10 +332,10 @@ paths:
             - order
     patch:
       tags:
-        - Orders
-      summary: Update an orders details
-      description: Update an orders details by internal order id
-      operationId: updateOrdersDetailsByInternalOrderId
+        - Ticket
+      summary: Update a Ticket details
+      description: Update a Ticket details by internal ticket
+      operationId: updateTicketDetailsByInternalTicketId
       parameters:
         - name: x-api-key 
           in: header
@@ -345,7 +346,7 @@ paths:
             example: "71HAiouphopG68imnybo2159HVi44"
         - name: ticket
           in: path
-          description: Vortex Order ID
+          description: Vortex ticket ID
           required: true
           schema:
             type: string
@@ -456,8 +457,8 @@ components:
           type: string
           format: uuid
           description: |
-            Codigo do pedido Vortex
-            Vortex Order ID
+            Codigo do ticket Vortex
+            Vortex ticket ID
           example: 9f190647-7615-43ab-9fc6-8129af51fbc4
         createDate:
           type: string
@@ -1031,8 +1032,8 @@ components:
           type: string
           format: uuid
           description: |
-            Codigo do pedido Vortex
-            Vortex Order ID
+            Codigo do ticket Vortex
+            Vortex ticket ID
           example: 9f190647-7615-43ab-9fc6-8129af51fbc4
         reference:
           type: string
