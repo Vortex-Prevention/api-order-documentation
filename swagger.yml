@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Swagger Vortex - Order -> OpenAPI 3.0
+  title: Swagger Vortex - Order
   description: |-
     This is a project for documentation of API Contract of Order.
 
@@ -299,10 +299,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/details"
+                $ref: "#/components/schemas/Details"
             application/xml:
               schema:
-                $ref: "#/components/schemas/details"
+                $ref: "#/components/schemas/Details"
         "400":
           description: Bad request
           content:
@@ -358,7 +358,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/details"
+                $ref: "#/components/schemas/Details"
         "204":
           description: Bad request
           content:
@@ -410,11 +410,11 @@ components:
           items:
             type: object
             $ref: "#/components/schemas/Item"
-        billing:
+        customer:
           description: |
             Dados de cobrança.
             Billing data
-          $ref: "#/components/schemas/Billing"
+          $ref: "#/components/schemas/Customer"
         shipping:
           description: |
             Dados de entrega
@@ -429,7 +429,7 @@ components:
             type: object
             $ref: "#/components/schemas/Payment"
 
-    details:
+    Details:
       allOf:
         - $ref: "#/components/schemas/OrderBase"
       type: object
@@ -445,6 +445,12 @@ components:
             Codigo do parceiro
             Partner's ID
           example: c884f438-c850-11ed-afa1-0242ac120002
+        partner:
+          type: string
+          description: |
+            Nome da loja parceira
+            Partner's store name
+          example: MegaLeo
         score:
           type: integer
           format: int64
@@ -672,12 +678,12 @@ components:
 
 
 
-    Billing:
+    Customer:
       type: object
       properties:
         client:
           description: |
-            Cliente da cobrança
+            Cliente da Customer
             Billing's client
           $ref: "#/components/schemas/Client"
         address:
@@ -704,13 +710,13 @@ components:
           $ref: "#/components/schemas/Client"
         address:
           description: |
-            Cliente da entrega
-            Shipping's client
+            Endereço da entrega
+            Shipping's address
           $ref: "#/components/schemas/Address"
         phones:
           description: |
-            Cliente da entrega
-            Shipping's client
+            Telefones da entrega
+            Shipping's phone
           type: array
           items:
             type: object
