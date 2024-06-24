@@ -10,42 +10,28 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.0.1
+  version: 2.0.1
 
 servers:
   - url: https://vortex-paas.sand-box.com
 tags:
-  - name: Ticket
-    description: Everything about your Ticket
+  - name: Order
+    description: Everything about your Order
     externalDocs:
       description: Read more
       url: http://vortex-paas.com/doc/ticket
       
 paths:
-  /analyzer/v1/order:
+  /check/v1/orders:
     post:
       tags:
-        - Ticket
+        - Order
       summary: Add a new order
       description: Adding a new order from a partner
       operationId: addOrder
       parameters:
-        - name: Authorization
-          in: header
-          description: Token bearer pre generate by oauth request
-          required: true
-          explode: true
-          schema:
-            type: string
-            example: "Bearer GHViphopimn46871HAiouybo21594"
-        - name: partnerId
-          in: header
-          description: Partner's ID
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: c884f438-c850-11ed-afa1-0242ac120002
+        - $ref: "#/components/parameters/Authorization"
+        - $ref: "#/components/parameters/PartnerID"
       requestBody:
         description: Add a new order
         content:
@@ -99,23 +85,15 @@ paths:
       security:
         - vortexOauth:
             - order
-
-  /analyzer/v1/tickets:
     get:
       tags:
-        - Ticket
-      summary: Get a list of all tickets
-      description: Get a list of all tickets in
+        - Order
+      summary: Get a list of all orders
+      description: Get a list of all orders in
       operationId: findOrders
       parameters:
-        - name: Authorization
-          in: header
-          description: Token bearer pre generate by oauth request
-          required: true
-          explode: true
-          schema:
-            type: string
-            example: "Bearer GHViphopimn46871HAiouybo21594"
+        - $ref: "#/components/parameters/Authorization"
+        - $ref: "#/components/parameters/PartnerID"
       responses:
         "200":
           description: Successful operation
@@ -145,154 +123,17 @@ paths:
         - vortexOauth:
             - order
 
-  /analyzer/v1/tickets/partnerId:
+  /check/v1/orders/{orderId}:
     get:
       tags:
-        - Ticket
-      summary: Get a list of Tickets
-      description: Get a list of Tickets from a particular partner
-      operationId: findTicketsByPartnerId
+        - Order
+      summary: Get an Order details
+      description: Get an Order details by internal Order
+      operationId: findOrderDetailsByInternalOrder
       parameters:
-        - name: Authorization
-          in: header
-          description: Token bearer pre generate by oauth request
-          required: true
-          explode: true
-          schema:
-            type: string
-            example: "Bearer GHViphopimn46871HAiouybo21594"
-        - name: partnerId
-          in: header
-          description: Partner's ID
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: c884f438-c850-11ed-afa1-0242ac120002
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/OrdersList"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/responses/BadRequest"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/responses/Unauthorized"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/responses/Forbidden"
-        "500":
-          description: Internal server error       
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/responses/InternalServerError"
-      security:
-        - vortexOauth:
-            - order
-
-  /analyzer/v1/ticket/partnerId/reference/{reference}:
-    get:
-      tags:
-        - Ticket
-      summary: Get an Ticket
-      description: Get an Ticket with a specific reference
-      operationId: findTicketByReference
-      parameters:
-        - name: Authorization
-          in: header
-          description: Token bearer pre generate by oauth request
-          required: true
-          explode: true
-          schema:
-            type: string
-            example: "Bearer GHViphopimn46871HAiouybo21594"
-        - name: reference
-          in: path
-          description: Partner's store order ID
-          required: true
-          schema:
-            type: string
-        - name: partnerId
-          in: header
-          description: Partner's ID
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: c884f438-c850-11ed-afa1-0242ac120002
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ShortOrder"
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/responses/BadRequest"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/responses/Unauthorized"
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/responses/Forbidden"
-        "500":
-          description: Internal server error       
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/responses/InternalServerError"
-      security:
-        - vortexOauth:
-            - order
-
-  /analyzer/v1/ticket/{ticket}/details:
-    get:
-      tags:
-        - Ticket
-      summary: Get an Ticket details
-      description: Get an Ticket details by internal ticket
-      operationId: findTicketDetailsByInternalTicket
-      parameters:
-        - name: Authorization
-          in: header
-          description: Token bearer pre generate by oauth request
-          required: true
-          explode: true
-          schema:
-            type: string
-            example: "Bearer GHViphopimn46871HAiouybo21594"
-        - name: ticket
-          in: path
-          description: Vortex ticket ID
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: 9f190647-7615-43ab-9fc6-8129af51fbc4
+        - $ref: "#/components/parameters/Authorization"
+        - $ref: "#/components/parameters/PartnerID"
+        - $ref: "#/components/parameters/OrderID"
       responses:
         "200":
           description: Successful operation
@@ -330,28 +171,17 @@ paths:
       security:
         - vortexOauth:
             - order
+            
     patch:
       tags:
-        - Ticket
-      summary: Update a Ticket details
-      description: Update a Ticket details by internal ticket
-      operationId: updateTicketDetailsByInternalTicketId
+        - Order
+      summary: Update a Order
+      description: Update a Order details by internal Order
+      operationId: updateOrderDetailsByInternalOrderId
       parameters:
-        - name: x-api-key 
-          in: header
-          description: API Key 
-          required: true
-          schema:
-            type: string
-            example: "71HAiouphopG68imnybo2159HVi44"
-        - name: ticket
-          in: path
-          description: Vortex ticket ID
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: 9f190647-7615-43ab-9fc6-8129af51fbc4
+        - $ref: "#/components/parameters/Authorization"
+        - $ref: "#/components/parameters/PartnerID"
+        - $ref: "#/components/parameters/OrderID"
       responses:
         "200":
           description: Successful operation
@@ -392,7 +222,88 @@ paths:
       security:
         - api_key: []
 
+  /check/v1/orders/reference/{reference}:
+    get:
+      tags:
+        - Order
+      summary: Get an Order
+      description: Get an Order with a specific reference
+      operationId: findOrderByReference
+      parameters:
+        - $ref: "#/components/parameters/Authorization"
+        - $ref: "#/components/parameters/PartnerID"
+        - $ref: "#/components/parameters/Reference"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShortOrder"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/Forbidden"
+        "500":
+          description: Internal server error       
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/InternalServerError"
+      security:
+        - vortexOauth:
+            - order
+
 components:
+  parameters:
+    Authorization:
+      name: Authorization
+      in: header
+      description: Token bearer pre generate by oauth request
+      required: true
+      explode: true
+      schema:
+        type: string
+        example: "Bearer GHViphopimn46871HAiouybo21594"
+    PartnerID:
+      name: PartnerID
+      in: header
+      description: Partner's ID
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: c884f438-c850-11ed-afa1-0242ac120002
+    OrderID:
+      name: OrderID
+      in: path
+      description: Vortex Order ID
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: 9f190647-7615-43ab-9fc6-8129af51fbc4
+    Reference:
+      name: Reference
+      in: path
+      description: Partner's store order ID
+      required: true
+      schema:
+        type: string
   schemas:
     OrderBase:
       type: object
@@ -435,7 +346,7 @@ components:
       type: object
       required:
         - partnerId
-        - ticket
+        - order
         - orderStatus
       properties:
         partnerId:
@@ -459,12 +370,12 @@ components:
             Pontuação de risco
             Score
           example: 10
-        ticket:
+        OrderID:
           type: string
           format: uuid
           description: |
-            Codigo do ticket Vortex
-            Vortex ticket ID
+            Codigo do pedido Vortex
+            Vortex order ID
           example: 9f190647-7615-43ab-9fc6-8129af51fbc4
         createDate:
           type: string
@@ -478,11 +389,11 @@ components:
             Data de atualização
             Update date
           example: "2023-03-09T21:38:59.9894222"
-        ticketStatus:
+        orderStatus:
           description: |
             Status do pedido
             Status
-          $ref: "#/components/schemas/TicketStatus"
+          $ref: "#/components/schemas/OrderStatus"
         issuerRelationship:
           type: boolean
           description: |
@@ -1081,7 +992,7 @@ components:
           example: 2029
 
 
-    TicketStatus:
+    OrderStatus:
       type: object
       properties:
         annotations:
@@ -1127,12 +1038,12 @@ components:
             Nome da loja parceira
             Partner's store name
           example: MegaLeo
-        ticket:
+        order:
           type: string
           format: uuid
           description: |
-            Codigo do ticket Vortex
-            Vortex ticket ID
+            Codigo do pedido de analise Vortex
+            Vortex order ID
           example: 9f190647-7615-43ab-9fc6-8129af51fbc4
         reference:
           type: string
@@ -1150,7 +1061,7 @@ components:
           description: |
             Status do pedido
             Order status
-          $ref: "#/components/schemas/TicketStatus"
+          $ref: "#/components/schemas/OrderStatus"
         
     Error:
       type: object
