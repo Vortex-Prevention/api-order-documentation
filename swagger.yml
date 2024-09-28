@@ -184,7 +184,7 @@ paths:
         - vortexOauth:
             - order
             
-    patch:
+    put:
       tags:
         - Order
       summary: Update a Order
@@ -279,6 +279,145 @@ paths:
       security:
         - vortexOauth:
             - order
+  /check/v1/orders/{orderId}/check-in:
+    patch:
+      tags:
+        - Order
+      summary: Check-in an order
+      description: Check-in an order by orderId. This endpoint allows you to mark an order as checked-in, indicating that the order has been received or processed at a specific point in the workflow.
+      operationId: checkInOrder
+      parameters:
+        - $ref: "#/components/parameters/Authorization"
+        - $ref: "#/components/parameters/PartnerID"
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Mark an order as checked-in by orderId. This endpoint indicates that the order has been received or processed at a specific point in the workflow.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCheckInOut"
+            examples:
+              OrderCheckInExample:
+                $ref: '#/components/examples/OrderCheckInExample'
+      responses:
+        "200":
+          description: Order checked in successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderCheckInOut"
+              examples:
+                OrderCheckInOutExampleIn:
+                  $ref: '#/components/examples/OrderCheckInOutExampleIn' 
+        "204":
+          description: No content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/NoContent"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/Forbidden"
+        "404":
+          description: Order not found
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/InternalServerError"
+      security:
+        - api_key: []
+  /check/v1/orders/{orderId}/check-out:
+    patch:
+      tags:
+        - Order
+      summary: Check-out an order
+      description: |
+        Check-out an order by orderId. This endpoint allows you to mark an order as checked-out, indicating that the order has been completed or finalized at a specific point in the workflow.
+      operationId: checkOutOrder
+      parameters:
+        - $ref: "#/components/parameters/Authorization"
+        - $ref: "#/components/parameters/PartnerID"
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Mark an order as checked-out by orderId. This endpoint indicates that the order has been completed or finalized at a specific point in the workflow.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCheckInOut"
+            examples:
+              OrderCheckOutExample:
+                $ref: '#/components/examples/OrderCheckOutExample'
+      responses:
+        "200":
+          description: Order checked out successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderCheckInOut"
+              examples:
+                OrderCheckInOutExampleOut:
+                  $ref: '#/components/examples/OrderCheckInOutExampleOut' 
+        "204":
+          description: No content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/NoContent"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/BadRequest"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/Unauthorized"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/Forbidden"
+        "404":
+          description: Order not found
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/InternalServerError"
+      security:
+        - api_key: []
 
 components:
   parameters:
@@ -1095,6 +1234,42 @@ components:
           type: string
           example: Response message
 
+    OrderCheck:
+      type: object
+      required:
+        - userId
+        - userName
+        - checkInDate 
+        - checkOutDate
+      properties:
+        userId:
+          type: string
+        userName:
+          type: string
+        checkInDate:
+          type: string
+          format: date-time
+        checkOutDate:
+          type: string
+          format: date-time   
+
+    OrderCheckInOut:
+      type: object
+      required:
+        - orderId
+        - checkIn
+        - orderCheck
+      properties:
+        orderId:
+          type: string
+          format: uuid
+        checkIn:
+          type: boolean
+        orderCheck:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderCheck"
+        
   responses:
     NoContent:
       description: |
@@ -1746,3 +1921,48 @@ components:
               paymentDetails:
                 voucherPayment:
                   voucherCode: "VOUCHER2023"
+
+    OrderCheckInExample:
+      value:
+        userId: "user123"
+        userName: "John Doe"
+        checkInDate: "2023-07-01T08:00:00Z"
+
+    OrderCheckOutExample:
+      value:
+        userId: "user123"
+        userName: "John Doe"
+        checkOutDate: "2023-07-01T17:00:00Z"
+
+    OrderCheckInOutExampleIn:
+      value:
+        orderId: "9f190647-7615-43ab-9fc6-8129af51fbc4"
+        checkIn: true
+        orderCheck:
+          - userId: "user123"
+            userName: "John Doe"
+            checkInDate: "2023-07-01T08:00:00Z"
+          - userId: "user456"
+            userName: "Jane Smith"
+            checkOutDate: "2023-07-01T17:00:00Z"
+          - userId: "user789"
+            userName: "Alice Johnson"
+            checkInDate: "2023-07-03T10:00:00Z"
+
+    OrderCheckInOutExampleOut:
+      value:
+        orderId: "9f190647-7615-43ab-9fc6-8129af51fbc4"
+        checkIn: false
+        orderCheck:
+          - userId: "user123"
+            userName: "John Doe"
+            checkInDate: "2023-07-01T08:00:00Z"
+            checkOutDate: "2023-07-01T17:00:00Z"
+          - userId: "user456"
+            userName: "Jane Smith"
+            checkInDate: "2023-07-02T09:00:00Z"
+            checkOutDate: "2023-07-02T18:00:00Z"
+          - userId: "user789"
+            userName: "Alice Johnson"
+            checkInDate: "2023-07-03T10:00:00Z"
+            checkOutDate: "2023-07-03T19:00:00Z"
