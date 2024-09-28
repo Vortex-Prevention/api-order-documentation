@@ -34,11 +34,22 @@ paths:
         - $ref: "#/components/parameters/PartnerID"
       requestBody:
         description: Add a new order
+        required: true
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/OrderBase"
-        required: true
+            examples:
+              OrderBaseCreditExample:
+                $ref: '#/components/examples/OrderBaseCreditExample'
+              OrderBaseDebitExample:
+                $ref: '#/components/examples/OrderBaseDebitExample'
+              OrderBasePixExample:
+                $ref: '#/components/examples/OrderBasePixExample'
+              OrderBaseTransferExample:
+                $ref: '#/components/examples/OrderBaseTransferExample'
+              OrderBaseVoucherExample:
+                $ref: '#/components/examples/OrderBaseVoucherExample'
       responses:
         "201":
           description: Successful operation
@@ -94,6 +105,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/Authorization"
         - $ref: "#/components/parameters/PartnerID"
+        - $ref: "#/components/parameters/Status"
       responses:
         "200":
           description: Successful operation
@@ -304,6 +316,13 @@ components:
       required: true
       schema:
         type: string
+    Status:
+      name: Status
+      in: query
+      description: Order status
+      schema:
+        type: string
+        example: newOrder
   schemas:
     OrderBase:
       type: object
@@ -1126,3 +1145,604 @@ components:
       type: apiKey
       name: x-api-key 
       in: header
+
+  examples:
+    OrderBaseCreditExample:
+      value:
+        info:
+          reference: "1512"
+          orderDateTime: "2023-03-09T21:38:59.9894222"
+          relationshipType: "Amigos de trabalho"
+          amount: 10000
+          totalAmount: 15995
+          discountamount: 0
+          ip: "192.168.0.1"
+          originChannel: "website"
+          businessId: 1
+          MCC: 1
+          SLA: 30
+          items:
+            - itemCode: "59845"
+              itemName: "Iphone13 mini 256gb"
+              amount: 530000
+              quantity: 1
+              categoryCode: 1
+              categoryName: "Smartphone"
+              isGift: false
+              isMarketPlace: true
+              sellerInfo:
+                sellerName: "Loja do Juquinha"
+                sellerDocument: "52645678910"
+              shippingInfo:
+                courier: "Fedex"
+                shippingType: "1"
+                shippingTime: "5 dias úteis"
+                shippingAmount: 5559
+                pickUpStoreDocument: "12345678910"
+          customer:
+            client:
+              clientType: 1
+              document: "12345678910"
+              name: "John Ronald Tolkien"
+              birthDate: "1988-02-10"
+              email: "client@email.com.br"
+              gender: "M"
+            address:
+              street: "Quincas Borba"
+              number: "31"
+              additionalInformation: "Bloco A - Apto 410"
+              district: "Vila Nova Cachoeirinha"
+              city: "São Paulo"
+              state: "SP"
+              zipcode: "08090-070"
+              country: "Brasil"
+              complement: "Proximo ao Shopping Bourbon"
+            phones:
+            - type: 1
+              ddi: 55
+              ddd: 11
+              phoneNumber: 999999999
+              extension: "2552"
+          shipping:
+            client:
+              clientType: 1
+              document: "12345678910"
+              name: "John Ronald Tolkien"
+              birthDate: "1988-02-10"
+              email: "client@email.com.br"
+              gender: "M"
+            address:
+              street: "Quincas Borba"
+              number: "31"
+              additionalInformation: "Bloco A - Apto 410"
+              district: "Vila Nova Cachoeirinha"
+              city: "São Paulo"
+              state: "SP"
+              zipcode: "08090-070"
+              country: "Brasil"
+              complement: "Proximo ao Shopping Bourbon"
+            phones:
+            - type: 1
+              ddi: 55
+              ddd: 11
+              phoneNumber: 999999999
+              extension: "2552"
+          payments:
+            - client:
+                clientType: 1
+                document: "12345678910"
+                name: "John Ronald Tolkien"
+                birthDate: "1988-02-10"
+                email: "client@email.com.br"
+                gender: "M"
+              address:
+                street: "Quincas Borba"
+                number: "31"
+                additionalInformation: "Bloco A - Apto 410"
+                district: "Vila Nova Cachoeirinha"
+                city: "São Paulo"
+                state: "SP"
+                zipcode: "08090-070"
+                country: "Brasil"
+                complement: "Proximo ao Shopping Bourbon"
+              phones:
+                - type: 1
+                  ddi: 55
+                  ddd: 11
+                  phoneNumber: 999999999
+                  extension: "2552"
+              amount: 15995
+              currency: 986
+              paymentMethod: "credit"
+              paymentDetails:
+                creditCardPayment:
+                  card:
+                    maskedPAN: "123456xxxxxx1234"
+                    hash: "12345678945612301234569874563210"
+                    bin: "123456"
+                    end: "1234"
+                    brandCode: 1
+                    expirationMonth: "05"
+                    expirationYear: "2029"
+                  authentication:
+                    type: "3Dsecure"
+                    3Dsecure:
+                      mpi: "thirdParty"
+                      eci: "05"
+                      cavv: "BwABBylVaQAAAAFwllVpAAAAAAA="
+                      dsTransactionId: "Nmp3VFdWMlEwZ05pWGN3SGo4TDA="
+                      version: "2"
+                  capture: false
+                  descriptor: "ECOMMERCE MERCHANT"
+                  recurrence: false
+
+    OrderBaseDebitExample:
+      value:
+        info:
+          reference: "1512"
+          orderDateTime: "2023-03-09T21:38:59.9894222"
+          relationshipType: "Amigos de trabalho"
+          amount: 10000
+          totalAmount: 15995
+          discountamount: 0
+          ip: "192.168.0.1"
+          originChannel: "website"
+          businessId: 1
+          MCC: 1
+          SLA: 30
+          items:
+          - itemCode: "59845"
+            itemName: "Iphone13 mini 256gb"
+            amount: 530000
+            quantity: 1
+            categoryCode: 1
+            categoryName: "Smartphone"
+            isGift: false
+            isMarketPlace: true
+            sellerInfo:
+              sellerName: "Loja do Juquinha"
+              sellerDocument: "52645678910"
+            shippingInfo:
+              courier: "Fedex"
+              shippingType: "1"
+              shippingTime: "5 dias úteis"
+              shippingAmount: 5559
+              pickUpStoreDocument: "12345678910"
+          customer:
+            client:
+              clientType: 1
+              document: "12345678910"
+              name: "John Ronald Tolkien"
+              birthDate: "1988-02-10"
+              email: "client@email.com.br"
+              gender: "M"
+            address:
+              street: "Quincas Borba"
+              number: "31"
+              additionalInformation: "Bloco A - Apto 410"
+              district: "Vila Nova Cachoeirinha"
+              city: "São Paulo"
+              state: "SP"
+              zipcode: "08090-070"
+              country: "Brasil"
+              complement: "Proximo ao Shopping Bourbon"
+            phones:
+              - type: 1
+                ddi: 55
+                ddd: 11
+                phoneNumber: 999999999
+                extension: "2552"
+          shipping:
+            client:
+              clientType: 1
+              document: "12345678910"
+              name: "John Ronald Tolkien"
+              birthDate: "1988-02-10"
+              email: "client@email.com.br"
+              gender: "M"
+            address:
+              street: "Quincas Borba"
+              number: "31"
+              additionalInformation: "Bloco A - Apto 410"
+              district: "Vila Nova Cachoeirinha"
+              city: "São Paulo"
+              state: "SP"
+              zipcode: "08090-070"
+              country: "Brasil"
+              complement: "Proximo ao Shopping Bourbon"
+            phones:
+              - type: 1
+                ddi: 55
+                ddd: 11
+                phoneNumber: 999999999
+                extension: "2552"
+          payments:
+          - client:
+              clientType: 1
+              document: "12345678910"
+              name: "John Ronald Tolkien"
+              birthDate: "1988-02-10"
+              email: "client@email.com.br"
+              gender: "M"
+            address:
+              street: "Quincas Borba"
+              number: "31"
+              additionalInformation: "Bloco A - Apto 410"
+              district: "Vila Nova Cachoeirinha"
+              city: "São Paulo"
+              state: "SP"
+              zipcode: "08090-070"
+              country: "Brasil"
+              complement: "Proximo ao Shopping Bourbon"
+            phones:
+              - type: 1
+                ddi: 55
+                ddd: 11
+                phoneNumber: 999999999
+                extension: "2552"
+            amount: 15995
+            currency: 986
+            paymentMethod: "debit"
+            paymentDetails:
+              debitCardPayment:
+                card:
+                  maskedPAN: "123456xxxxxx1234"
+                  hash: "12345678945612301234569874563210"
+                  bin: "123456"
+                  end: "1234"
+                  brandCode: 1
+                  expirationMonth: "05"
+                  expirationYear: "2029"
+                authentication:
+                  type: "3Dsecure"
+                  3Dsecure:
+                    mpi: "thirdParty"
+                    eci: "05"
+                    cavv: "BwABBylVaQAAAAFwllVpAAAAAAA="
+                    dsTransactionId: "Nmp3VFdWMlEwZ05pWGN3SGo4TDA="
+                    version: "2"
+                descriptor: "ECOMMERCE MERCHANT"
+                recurrence: false
+    OrderBasePixExample:
+      value:
+        info:
+          reference: "2023"
+          orderDateTime: "2023-04-10T10:20:30.1234567"
+          relationshipType: "Colegas de trabalho"
+          amount: 20000
+          totalAmount: 20995
+          discountamount: 1000
+          ip: "192.168.1.1"
+          originChannel: "mobile"
+          businessId: 2
+          MCC: 2
+          SLA: 15
+          items:
+          - itemCode: "12345"
+            itemName: "Samsung Galaxy S21"
+            amount: 200000
+            quantity: 1
+            categoryCode: 2
+            categoryName: "Smartphone"
+            isGift: true
+            isMarketPlace: false
+            sellerInfo:
+              sellerName: "Loja do Pedro"
+              sellerDocument: "12345678901"
+            shippingInfo:
+              courier: "DHL"
+              shippingType: "2"
+              shippingTime: "3 dias úteis"
+              shippingAmount: 3000
+              pickUpStoreDocument: "9876543210"
+          customer:
+            client:
+              clientType: 2
+              document: "10987654321"
+              name: "Jane Doe"
+              birthDate: "1990-05-15"
+              email: "jane.doe@example.com"
+              gender: "F"
+            address:
+              street: "Rua das Flores"
+              number: "100"
+              additionalInformation: "Apto 101"
+              district: "Centro"
+              city: "Rio de Janeiro"
+              state: "RJ"
+              zipcode: "20000-000"
+              country: "Brasil"
+              complement: "Próximo ao metrô"
+            phones:
+              - type: 2
+                ddi: 55
+                ddd: 21
+                phoneNumber: 987654321
+                extension: "1234"
+          shipping:
+            client:
+              clientType: 2
+              document: "10987654321"
+              name: "Jane Doe"
+              birthDate: "1990-05-15"
+              email: "jane.doe@example.com"
+              gender: "F"
+            address:
+              street: "Rua das Flores"
+              number: "100"
+              additionalInformation: "Apto 101"
+              district: "Centro"
+              city: "Rio de Janeiro"
+              state: "RJ"
+              zipcode: "20000-000"
+              country: "Brasil"
+              complement: "Próximo ao metrô"
+            phones:
+              - type: 2
+                ddi: 55
+                ddd: 21
+                phoneNumber: 987654321
+                extension: "1234"
+          payments:
+            - client:
+                clientType: 2
+                document: "10987654321"
+                name: "Jane Doe"
+                birthDate: "1990-05-15"
+                email: "jane.doe@example.com"
+                gender: "F"
+              address:
+                street: "Rua das Flores"
+                number: "100"
+                additionalInformation: "Apto 101"
+                district: "Centro"
+                city: "Rio de Janeiro"
+                state: "RJ"
+                zipcode: "20000-000"
+                country: "Brasil"
+                complement: "Próximo ao metrô"
+              phones:
+              - type: 2
+                ddi: 55
+                ddd: 21
+                phoneNumber: 987654321
+                extension: "1234"
+              amount: 20995
+              currency: 986
+              paymentMethod: "pix"
+              paymentDetails:
+                pixPayment:
+                  pixInfo: "Chave: 9876543210"
+
+    OrderBaseTransferExample:
+      value:
+        info:
+          reference: "3030"
+          orderDateTime: "2023-05-15T15:30:45.6789123"
+          relationshipType: "Familiares"
+          amount: 30000
+          totalAmount: 30995
+          discountamount: 500
+          ip: "192.168.2.2"
+          originChannel: "desktop"
+          businessId: 3
+          MCC: 3
+          SLA: 20
+          items:
+            - itemCode: "67890"
+              itemName: "MacBook Pro"
+              amount: 300000
+              quantity: 1
+              categoryCode: 3
+              categoryName: "Laptop"
+              isGift: false
+              isMarketPlace: true
+              sellerInfo:
+                sellerName: "Loja da Maria"
+                sellerDocument: "23456789012"
+              shippingInfo:
+                courier: "UPS"
+                shippingType: "3"
+                shippingTime: "7 dias úteis"
+                shippingAmount: 7000
+                pickUpStoreDocument: "8765432109"
+          customer:
+            client:
+              clientType: 3
+              document: "21098765432"
+              name: "Carlos Silva"
+              birthDate: "1985-10-20"
+              email: "carlos.silva@example.com"
+              gender: "M"
+            address:
+              street: "Avenida Paulista"
+              number: "200"
+              additionalInformation: "Sala 202"
+              district: "Bela Vista"
+              city: "São Paulo"
+              state: "SP"
+              zipcode: "01310-000"
+              country: "Brasil"
+              complement: "Próximo ao MASP"
+            phones:
+              - type: 3
+                ddi: 55
+                ddd: 11
+                phoneNumber: 876543210
+                extension: "5678"
+          shipping:
+            client:
+              clientType: 3
+              document: "21098765432"
+              name: "Carlos Silva"
+              birthDate: "1985-10-20"
+              email: "carlos.silva@example.com"
+              gender: "M"
+            address:
+              street: "Avenida Paulista"
+              number: "200"
+              additionalInformation: "Sala 202"
+              district: "Bela Vista"
+              city: "São Paulo"
+              state: "SP"
+              zipcode: "01310-000"
+              country: "Brasil"
+              complement: "Próximo ao MASP"
+            phones:
+              - type: 3
+                ddi: 55
+                ddd: 11
+                phoneNumber: 876543210
+                extension: "5678"
+          payments:
+            - client:
+                clientType: 3
+                document: "21098765432"
+                name: "Carlos Silva"
+                birthDate: "1985-10-20"
+                email: "carlos.silva@example.com"
+                gender: "M"
+              address:
+                street: "Avenida Paulista"
+                number: "200"
+                additionalInformation: "Sala 202"
+                district: "Bela Vista"
+                city: "São Paulo"
+                state: "SP"
+                zipcode: "01310-000"
+                country: "Brasil"
+                complement: "Próximo ao MASP"
+              phones:
+                - type: 3
+                  ddi: 55
+                  ddd: 11
+                  phoneNumber: 876543210
+                  extension: "5678"
+              amount: 30995
+              currency: 986
+              paymentMethod: "transfer"
+              paymentDetails:
+                transferPayment:
+                  senderInfo:
+                    name: "Carlos Silva"
+                    document: "21098765432"
+                    bank: "Banco do Brasil"
+                    branch: "1234"
+                    account: "567890"
+                  recipientInfo:
+                    name: "Loja da Maria"
+                    document: "23456789012"
+                    bank: "Itaú"
+                    branch: "4321"
+                    account: "098765"
+
+    OrderBaseVoucherExample:
+      value:
+        info:
+          reference: "4040"
+          orderDateTime: "2023-06-20T20:40:50.9876543"
+          relationshipType: "Amigos"
+          amount: 40000
+          totalAmount: 40995
+          discountamount: 2000
+          ip: "192.168.3.3"
+          originChannel: "tablet"
+          businessId: 4
+          MCC: 4
+          SLA: 25
+          items:
+            - itemCode: "54321"
+              itemName: "PlayStation 5"
+              amount: 400000
+              quantity: 1
+              categoryCode: 4
+              categoryName: "Console"
+              isGift: true
+              isMarketPlace: false
+              sellerInfo:
+                sellerName: "Loja do João"
+                sellerDocument: "34567890123"
+              shippingInfo:
+                courier: "Correios"
+                shippingType: "4"
+                shippingTime: "10 dias úteis"
+                shippingAmount: 10000
+                pickUpStoreDocument: "7654321098"
+          customer:
+            client:
+              clientType: 4
+              document: "32109876543"
+              name: "Ana Pereira"
+              birthDate: "1995-12-25"
+              email: "ana.pereira@example.com"
+              gender: "F"
+            address:
+              street: "Rua das Palmeiras"
+              number: "300"
+              additionalInformation: "Casa"
+              district: "Jardim Botânico"
+              city: "Curitiba"
+              state: "PR"
+              zipcode: "80000-000"
+              country: "Brasil"
+              complement: "Próximo ao parque"
+            phones:
+              - type: 4
+                ddi: 55
+                ddd: 41
+                phoneNumber: 765432109
+                extension: "9101"
+          shipping:
+            client:
+              clientType: 4
+              document: "32109876543"
+              name: "Ana Pereira"
+              birthDate: "1995-12-25"
+              email: "ana.pereira@example.com"
+              gender: "F"
+            address:
+              street: "Rua das Palmeiras"
+              number: "300"
+              additionalInformation: "Casa"
+              district: "Jardim Botânico"
+              city: "Curitiba"
+              state: "PR"
+              zipcode: "80000-000"
+              country: "Brasil"
+              complement: "Próximo ao parque"
+            phones:
+              - type: 4
+                ddi: 55
+                ddd: 41
+                phoneNumber: 765432109
+                extension: "9101"
+          payments:
+            - client:
+                clientType: 4
+                document: "32109876543"
+                name: "Ana Pereira"
+                birthDate: "1995-12-25"
+                email: "ana.pereira@example.com"
+                gender: "F"
+              address:
+                street: "Rua das Palmeiras"
+                number: "300"
+                additionalInformation: "Casa"
+                district: "Jardim Botânico"
+                city: "Curitiba"
+                state: "PR"
+                zipcode: "80000-000"
+                country: "Brasil"
+                complement: "Próximo ao parque"
+              phones:
+                - type: 4
+                  ddi: 55
+                  ddd: 41
+                  phoneNumber: 765432109
+                  extension: "9101"
+              amount: 40995
+              currency: 986
+              paymentMethod: "voucher"
+              paymentDetails:
+                voucherPayment:
+                  voucherCode: "VOUCHER2023"
