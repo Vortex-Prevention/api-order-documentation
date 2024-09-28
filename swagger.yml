@@ -19,7 +19,7 @@ tags:
     description: Everything about your Order
     externalDocs:
       description: Read more
-      url: http://vortex-paas.com/doc/ticket
+      url: http://vortex-paas.com/doc/check
       
 paths:
   /check/v1/orders:
@@ -1215,7 +1215,7 @@ components:
             Data do pedido
             Order's date
           example: "2023-03-09T21:38:59.9894222"
-        ticketStatus:
+        orderStatus:
           description: |
             Status do pedido
             Order status
